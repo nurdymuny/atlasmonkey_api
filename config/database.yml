@@ -1,0 +1,8 @@
+development:
+  adapter: mysql2
+  database: atlasmonkey_dev
+  pool: 5
+  timeout: 5000
+  username: root
+  password:
+  host: localhost
