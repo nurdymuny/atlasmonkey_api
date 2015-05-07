@@ -1,0 +1,35 @@
+<br/><br/>
+<div class="col-md-6 col-md-offset-2">
+  <div class="col-md-12 nopadding">
+    <div class="col-md-6 nopadding">
+      <h2 style="margin: 0;">Blocks</h2>
+    </div>
+    <div class="col-md-6 nopadding">
+      <%= link_to "+ Add New Block", new_api_v1_venue_block_path(@venue), method: :get, class: "btn btn-default pull-right" %>
+    </div>
+  </div>
+  <br/><br/>
+  <% if @blocks.present? %>
+    <table class="table table-responsive table-bordered">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Seats</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @blocks.each do |block| %>
+          <tr>
+            <td><%= block.name %></td>
+            <td><%= block.no_of_seats %></td>
+            <td colspan="2">
+              <%=link_to "Edit", edit_api_v1_venue_block_path(@venue, block), method: :get, class: "btn btn-primary" %>
+              <%=link_to "Delete", api_v1_venue_block_path(@venue, block), method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure?"} %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

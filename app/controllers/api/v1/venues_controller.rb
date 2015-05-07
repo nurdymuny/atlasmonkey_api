@@ -2,6 +2,10 @@ class Api::V1::VenuesController < ApplicationController
   
   def index
     @venues = Venue.all
+    respond_to do |format|
+      format.json { render json: {state: {:code => 1}, :data => {venues: @venues } }}
+      format.html {}
+    end
   end
   
   def new
@@ -12,11 +16,11 @@ class Api::V1::VenuesController < ApplicationController
     @venue = Venue.new(venue_params)
     respond_to do |format|
       if @venue.save
-        format.html {redirect_to api_v1_venues_path}
         format.json {render json: {state: {:code => 1}, :data => {message: "Venue added successfully." } }}
+        format.html {redirect_to api_v1_venues_path}
       else
-        format.html {render :new}
         format.json {render json: {state: {:code => 0}, :data => {message: @venue.errors.full_messages } }}
+        format.html {render :new}
       end
     end
   end
@@ -33,11 +37,11 @@ class Api::V1::VenuesController < ApplicationController
     @venue = Venue.find(params[:id])
     respond_to do |format|
       if @venue.update_attributes(venue_params)
-        format.html {redirect_to api_v1_venues_path}
         format.json {render json: {state: {:code => 1}, :data => {message: "Venue updated successfully." } }}
+        format.html {redirect_to api_v1_venues_path}
       else
-        format.html {render :edit}
         format.json {render json: {state: {:code => 0}, :data => {message: @venue.errors.full_messages } }}
+        format.html {render :edit}
       end
     end
   end
@@ -46,8 +50,8 @@ class Api::V1::VenuesController < ApplicationController
     @venue = Venue.find(params[:id])
     @venue.destroy
     respond_to do |format|
-      format.html {redirect_to api_v1_venues_path}
       format.json {render json: {state: {:code => 1}, :data => {message: "Venue deleted successfully." } }}
+      format.html {redirect_to api_v1_venues_path}
     end
   end
   

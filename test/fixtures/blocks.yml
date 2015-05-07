@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  venue_id: 1
+  name: MyString
+  no_of_seats: 1
+  left: MyText
+  right: MyText
+  top_left: MyText
+  top_right: MyText
+
+two:
+  venue_id: 1
+  name: MyString
+  no_of_seats: 1
+  left: MyText
+  right: MyText
+  top_left: MyText
+  top_right: MyText
