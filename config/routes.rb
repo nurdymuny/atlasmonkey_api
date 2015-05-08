@@ -1,16 +1,21 @@
 Rails.application.routes.draw do
   
+  devise_for :users
+  resources :home, only: [:index]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
   namespace :api do
     namespace :v1 do
+      resources :blocks, only: [] do
+        resources :seats
+      end
       resources :venues do
         resources :blocks
       end
     end
   end
   # You can have the root of your site routed with "root"
-  root 'api/v1/venues#index'
+  root 'home#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

@@ -1,4 +1,5 @@
 class Api::V1::BlocksController < ApplicationController
+  load_and_authorize_resource
   def index
     @venue = Venue.find(params[:venue_id])
     @blocks = @venue.blocks

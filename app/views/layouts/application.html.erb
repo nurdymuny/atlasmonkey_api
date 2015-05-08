@@ -8,6 +8,8 @@
 </head>
 <body>
 
+<h3><%= link_to "signout", destroy_user_session_path,class:"pull-right " if current_user.present? %></h3>
+
 <%= yield %>
 
 </body>

@@ -26,6 +26,7 @@
             <td colspan="2">
               <%=link_to "Edit", edit_api_v1_venue_block_path(@venue, block), method: :get, class: "btn btn-primary" %>
               <%=link_to "Delete", api_v1_venue_block_path(@venue, block), method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure?"} %>
+              <%= link_to "Create seats", new_api_v1_block_seat_path(block), method: :get, class: "btn btn-primary" %>
             </td>
           </tr>
         <% end %>

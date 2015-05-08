@@ -1,5 +1,5 @@
 class Api::V1::VenuesController < ApplicationController
-  
+  load_and_authorize_resource
   def index
     @venues = Venue.all
     respond_to do |format|
