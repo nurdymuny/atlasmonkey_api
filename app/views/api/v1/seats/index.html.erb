@@ -1,30 +1,31 @@
 <h1>All seats of block </h1>
-
-<% if @all_seats.present? %>
-  <table class="table table-responsive table-bordered">
-     <thead>
-        <tr>
-          <th>Seat_number </th>
-          <th>Block_id</th>
-          <th>longitude</th>
-          <th>latitude</th>
-          <th>Actions </th>
-        </tr>
-      </thead>
-       <tbody>
-          <% @all_seats.each do |s| %>
-            <tr>
-              <td><%= s.seat_number %></td>
-              <td><%= s.block_id %></td>
-              <td><%= s.longitude %></td>
-              <td><%=  s.latitude %></td>
-              <td>
-                <%= link_to "Edit", edit_api_v1_block_seat_path(@block, s.id),class: "btn btn-primary" %>
-                <%= link_to "Destroy",  api_v1_block_seat_path(@block, s.id),class: "btn btn-danger",data: {confirm:"Are you sure"},method: :delete %>
-                <%= link_to "Go Back", api_v1_venue_blocks_path(@venue),class: "btn btn-primary" %>
-              </td>
-            </tr>
-          <% end %>
-      </tboby>
-  </table>
-<% end %>
+<div class= "col-md-8 col-md-offset-2">
+  <% if @all_seats.present? %>
+    <table class="table table-responsive table-bordered">
+       <thead>
+          <tr>
+            <th>Seat_number </th>
+            <th>Block_id</th>
+            <th>longitude</th>
+            <th>latitude</th>
+            <th>Actions </th>
+          </tr>
+        </thead>
+         <tbody>
+            <% @all_seats.each do |s| %>
+              <tr>
+                <td><%= s.seat_number %></td>
+                <td><%= s.block_id %></td>
+                <td><%= s.longitude %></td>
+                <td><%=  s.latitude %></td>
+                <td>
+                  <%= link_to "Edit", edit_api_v1_block_seat_path(@block, s.id),class: "btn btn-primary" %>
+                  <%= link_to "Destroy",  api_v1_block_seat_path(@block, s.id),class: "btn btn-danger",data: {confirm:"Are you sure"},method: :delete %>
+                  <%= link_to "Go Back", api_v1_venue_blocks_path(@venue),class: "btn btn-primary" %>
+                </td>
+              </tr>
+            <% end %>
+        </tboby>
+    </table>
+  <% end %>
+</div>

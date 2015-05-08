@@ -6,6 +6,13 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
   namespace :api do
     namespace :v1 do
+      devise_scope :user do
+        post '/forget_password' => 'passwords#create', :as => 'reset_password'
+      end
+      post '/registrations' => 'registrations#create'
+      patch '/update' => 'registrations#update'
+      post '/login' => 'sessions#create'
+      delete '/logout' => 'sessions#destroy'
       resources :blocks, only: [] do
         resources :seats
       end
@@ -16,7 +23,6 @@ Rails.application.routes.draw do
   end
   # You can have the root of your site routed with "root"
   root 'home#index'
-
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
