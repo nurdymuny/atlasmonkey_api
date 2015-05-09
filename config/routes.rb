@@ -13,6 +13,8 @@ Rails.application.routes.draw do
       patch '/update' => 'registrations#update'
       post '/login' => 'sessions#create'
       delete '/logout' => 'sessions#destroy'
+      post '/add_ticket_detail' => 'tickets#add_ticket_detail'
+      get '/get_ticket_detail' => 'tickets#get_ticket_detail'
       resources :blocks, only: [] do
         resources :seats
       end

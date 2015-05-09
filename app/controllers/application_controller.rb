@@ -23,6 +23,11 @@ class ApplicationController < ActionController::Base
 
 
   def current_ability
+    if current_user.present?
+      current_user = current_user
+    else
+      current_user = UserToken.find_by_auth_token(request.headers['auth-token']).user
+    end
     @current_ability ||= Ability.new(current_user)
   end
 end
