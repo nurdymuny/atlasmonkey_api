@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  http_basic_authenticate_with :name => "atlasmonkey", :password => "am@staging", if: :html_request?
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   #load_and_authorize_resource
@@ -19,7 +20,14 @@ class ApplicationController < ActionController::Base
       home_index_path
     end
   end
-
+  
+  def html_request?
+    if request.format.html?
+      true
+    else
+      false
+    end
+  end
 
   def current_ability
     if current_user.present?
