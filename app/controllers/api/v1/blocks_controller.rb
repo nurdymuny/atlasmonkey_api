@@ -1,10 +1,10 @@
 class Api::V1::BlocksController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource :except => [:index]
   def index
     @venue = Venue.find(params[:venue_id])
     @blocks = @venue.blocks
     respond_to do |format|
-      format.json { render json: {:success => true, :data => {venues: @venue.as_json(include: :blocks) } }}
+      format.json { render json: {:success => true, :data => {venue: @venue.as_json(include: :blocks) } }}
       format.html {}
     end
   end
