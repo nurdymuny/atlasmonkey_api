@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-
   def after_sign_in_path_for(resource)
     if current_user.is_admin
       api_v1_venues_path
@@ -24,10 +23,10 @@ class ApplicationController < ActionController::Base
 
   def current_ability
     if current_user.present?
-      current_user = current_user
+      @current_user = current_user
     else
-      current_user = UserToken.find_by_auth_token(request.headers['auth-token']).user
+      @current_user = UserToken.find_by_auth_token(request.headers['auth-token']).user
     end
-    @current_ability ||= Ability.new(current_user)
+    @current_ability ||= Ability.new(@current_user)
   end
 end
