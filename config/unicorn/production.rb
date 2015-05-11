@@ -1,7 +1,7 @@
 # paths
 app_path = "/var/www/atlasmonkey.com"
 working_directory "#{app_path}/current"
-pid               "#{app_path}/current/tmp/pids/unicorn.pid"
+pid               "#{app_path}/shared/tmp/pids/unicorn.pid"
 
 # listen
 listen "/tmp/unicorn.atlasmonkey.com.sock", :backlog => 64
