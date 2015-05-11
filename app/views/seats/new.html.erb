@@ -1,8 +1,7 @@
-<h1> Edit Seat  </h1>
-<%= form_for @seat, url: api_v1_block_seat_path ,method: :patch do |f| %>
-  <%= f.hidden_field :block_id,:value => @block.id %>
+<h1> Create Seats for block</h1>
+<%= form_for @seat, url: block_seats_path ,method: :post do |f| %>
   <%=f.text_field :seat_number, placeholder: "Seat_number" %><br/><br/>
   <%=f.text_field :latitude, placeholder: "Latitude of Seat" %><br/><br/>
   <%=f.text_field :longitude, placeholder: "Longitude of seat" %><br/><br/>
-  <%= f.submit "Update" %>
+  <%= f.submit "Create" %>
 <% end %>

@@ -4,6 +4,14 @@ Rails.application.routes.draw do
   resources :home, only: [:index]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
+  resources :venues do
+    resources :blocks
+  end
+  resources :blocks, only: [] do
+    resources :seats
+  end
+  
+  
   namespace :api do
     namespace :v1 do
       devise_scope :user do
@@ -13,13 +21,10 @@ Rails.application.routes.draw do
       patch '/update' => 'registrations#update'
       post '/login' => 'sessions#create'
       delete '/logout' => 'sessions#destroy'
-      post '/add_ticket_detail' => 'tickets#add_ticket_detail'
+      #post '/add_ticket_detail' => 'tickets#add_ticket_detail'
       get '/get_ticket_detail' => 'tickets#get_ticket_detail'
-      resources :blocks, only: [] do
-        resources :seats
-      end
-      resources :venues do
-        resources :blocks
+      resources :venues, only: [] do
+        resources :blocks, only: [:index]
       end
     end
   end

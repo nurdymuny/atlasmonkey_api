@@ -1,5 +1,5 @@
 <h2>Create new Venue</h2>
-<%=form_for @venue, url: api_v1_venues_path do |f| %>
+<%=form_for @venue, url: venues_path do |f| %>
   <%=f.text_field :name %><br/><br/>
   <%=f.text_field :location %><br/><br/>
   <%= f.submit "Create" %>

@@ -1,4 +1,4 @@
-class Api::V1::VenuesController < ApplicationController
+class VenuesController < ApplicationController
   load_and_authorize_resource
   def index
     @venues = Venue.all
@@ -17,7 +17,7 @@ class Api::V1::VenuesController < ApplicationController
     respond_to do |format|
       if @venue.save
         format.json {render json: {:success => true, :data => {message: "Venue added successfully." } }}
-        format.html {redirect_to api_v1_venues_path}
+        format.html {redirect_to venues_path}
       else
         format.json {render json: {:success => false , :data => {message: @venue.errors.full_messages } }}
         format.html {render :new}
@@ -38,7 +38,7 @@ class Api::V1::VenuesController < ApplicationController
     respond_to do |format|
       if @venue.update_attributes(venue_params)
         format.json {render json: {:success => true, :data => {message: "Venue updated successfully." } }}
-        format.html {redirect_to api_v1_venues_path}
+        format.html {redirect_to venues_path}
       else
         format.json {render json: {:success => false, :data => {message: @venue.errors.full_messages } }}
         format.html {render :edit}
@@ -51,7 +51,7 @@ class Api::V1::VenuesController < ApplicationController
     @venue.destroy
     respond_to do |format|
       format.json {render json: {:success => true, :data => {message: "Venue deleted successfully." } }}
-      format.html {redirect_to api_v1_venues_path}
+      format.html {redirect_to venues_path}
     end
   end
   

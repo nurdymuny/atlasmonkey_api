@@ -5,7 +5,7 @@
       <h2 style="margin: 0;">All Venues</h2>
     </div>
     <div class="col-md-6 nopadding">
-      <%= link_to "+ Add New Venue", new_api_v1_venue_path, method: :get, class: "btn btn-default pull-right" %>
+      <%= link_to "+ Add New Venue", new_venue_path, method: :get, class: "btn btn-default pull-right" %>
     </div>
   </div>
   <br/><br/>
@@ -24,9 +24,9 @@
             <td><%= venue.name%></td>
             <td><%= venue.location %></td>
             <td>
-              <%=link_to "Edit", edit_api_v1_venue_path(venue), method: :get, class: "btn btn-primary" %>
-              <%=link_to "Manage", api_v1_venue_path(venue), method: :get, class: "btn btn-primary" %>
-              <%=link_to "Delete", api_v1_venue_path(venue), method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure?"} %>
+              <%=link_to "Edit", edit_venue_path(venue), method: :get, class: "btn btn-primary" %>
+              <%=link_to "Manage", venue_path(venue), method: :get, class: "btn btn-primary" %>
+              <%=link_to "Delete", venue_path(venue), method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure?"} %>
             </td>
         <% end %>
       </tbody>

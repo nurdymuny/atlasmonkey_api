@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied do |exception|
     if current_user.is_admin
-      redirect_to api_v1_venues_path, :alert => "successfuly sign_in"
+      redirect_to venues_path, :alert => "successfuly sign_in"
     else
       redirect_to home_index_path, :alert => exception.message
     end
@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     if current_user.is_admin
-      api_v1_venues_path
+      venues_path
     else
       home_index_path
     end

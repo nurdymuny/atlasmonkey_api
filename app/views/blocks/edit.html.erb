@@ -1,5 +1,5 @@
 <h2>Create new Block</h2>
-<%=form_for @block, url: api_v1_venue_blocks_path(@venue) do |f| %>
+<%=form_for @block, url: venue_block_path(@venue, @block) do |f| %>
   <%=f.hidden_field :venue_id %><br/><br/>
   <%=f.text_field :name, placeholder: "Name" %><br/><br/>
   <%=f.text_field :no_of_seats, placeholder: "No of Seats" %><br/><br/>
@@ -7,5 +7,5 @@
   <%=f.text_field :right, placeholder: "Right seat Lat, Long" %><br/><br/>
   <%=f.text_field :top_left, placeholder: "Top Left seat Lat, Long" %><br/><br/>
   <%=f.text_field :top_right, placeholder: "Top Right seat Lat, Long" %><br/><br/>
-  <%= f.submit "Create" %>
+  <%= f.submit "Update" %>
 <% end %>

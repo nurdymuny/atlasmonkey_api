@@ -5,7 +5,7 @@
       <h2 style="margin: 0;">Blocks</h2>
     </div>
     <div class="col-md-6 nopadding">
-      <%= link_to "+ Add New Block", new_api_v1_venue_block_path(@venue), method: :get, class: "btn btn-default pull-right" %>
+      <%= link_to "+ Add New Block", new_venue_block_path(@venue), method: :get, class: "btn btn-default pull-right" %>
     </div>
   </div>
   <br/><br/>
@@ -24,9 +24,9 @@
             <td><%= block.name %></td>
             <td><%= block.no_of_seats %></td>
             <td colspan="2">
-              <%=link_to "Edit", edit_api_v1_venue_block_path(@venue, block), method: :get, class: "btn btn-primary" %>
-              <%=link_to "Delete", api_v1_venue_block_path(@venue, block), method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure?"} %>
-              <%= link_to "Create seats", new_api_v1_block_seat_path(block), method: :get, class: "btn btn-primary" %>
+              <%=link_to "Edit", edit_venue_block_path(@venue, block), method: :get, class: "btn btn-primary" %>
+              <%=link_to "Delete", venue_block_path(@venue, block), method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure?"} %>
+              <%= link_to "Create seats", new_block_seat_path(block), method: :get, class: "btn btn-primary" %>
             </td>
           </tr>
         <% end %>

@@ -1,4 +1,4 @@
-class Api::V1::SeatsController < ApplicationController
+class SeatsController < ApplicationController
   before_action :find_block, only:[:new,:create,:show,:index,:edit,:update,:destroy]
   before_action :find_seat, only: [:show,:edit,:update,:destroy]
   before_filter :initialize_seat ,only: [:create]
@@ -21,7 +21,7 @@ class Api::V1::SeatsController < ApplicationController
     respond_to do |format|
       if @seat.save
         format.json {render json: {:success => true , :data => {message: "Seat added successfully." } }}
-        format.html {redirect_to api_v1_block_seat_path(@block,@seat),notice: "Seat added successfully." }
+        format.html {redirect_to block_seat_path(@block,@seat),notice: "Seat added successfully." }
       else
         format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
         format.html {render :new}
@@ -39,7 +39,7 @@ class Api::V1::SeatsController < ApplicationController
     respond_to do |format|
       if @seat.update_attributes(seats_params)
         format.json {render json: {:success => true, :data => {message: "Seat updated successfully." } }}
-        format.html {redirect_to api_v1_block_seat_path(@block,@seat)}
+        format.html {redirect_to block_seat_path(@block,@seat)}
       else
         format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
         format.html {render :edit}
@@ -52,11 +52,11 @@ class Api::V1::SeatsController < ApplicationController
     if @seat.destroy
       respond_to do |format|
         format.json {render json: {:success => true, :data => {message: "Seat deleted successfully." } }}
-        format.html {redirect_to api_v1_block_seats_path(@block)}
+        format.html {redirect_to block_seats_path(@block)}
       end
     else
       format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
-      format.html {redirect_to api_v1_block_seats_path(@block)}
+      format.html {redirect_to block_seats_path(@block)}
     end
 
   end
