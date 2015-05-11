@@ -13,5 +13,5 @@ production:
   pool: 5
   timeout: 5000
   username: root
-  password: @tlasmonkey$4311!@
+  password: atlasmonkey$4311!@
   host: localhost
