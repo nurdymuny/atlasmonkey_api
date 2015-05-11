@@ -3,7 +3,7 @@ class Api::V1::VenuesController < ApplicationController
   def index
     @venues = Venue.all
     respond_to do |format|
-      format.json { render json: {state: {:code => 1}, :data => {venues: @venues } }}
+      format.json { render json: {:success => true, :data => {venues: @venues } }}
       format.html {}
     end
   end
@@ -16,10 +16,10 @@ class Api::V1::VenuesController < ApplicationController
     @venue = Venue.new(venue_params)
     respond_to do |format|
       if @venue.save
-        format.json {render json: {state: {:code => 1}, :data => {message: "Venue added successfully." } }}
+        format.json {render json: {:success => true, :data => {message: "Venue added successfully." } }}
         format.html {redirect_to api_v1_venues_path}
       else
-        format.json {render json: {state: {:code => 0}, :data => {message: @venue.errors.full_messages } }}
+        format.json {render json: {:success => false , :data => {message: @venue.errors.full_messages } }}
         format.html {render :new}
       end
     end
@@ -37,10 +37,10 @@ class Api::V1::VenuesController < ApplicationController
     @venue = Venue.find(params[:id])
     respond_to do |format|
       if @venue.update_attributes(venue_params)
-        format.json {render json: {state: {:code => 1}, :data => {message: "Venue updated successfully." } }}
+        format.json {render json: {:success => true, :data => {message: "Venue updated successfully." } }}
         format.html {redirect_to api_v1_venues_path}
       else
-        format.json {render json: {state: {:code => 0}, :data => {message: @venue.errors.full_messages } }}
+        format.json {render json: {:success => false, :data => {message: @venue.errors.full_messages } }}
         format.html {render :edit}
       end
     end
@@ -50,7 +50,7 @@ class Api::V1::VenuesController < ApplicationController
     @venue = Venue.find(params[:id])
     @venue.destroy
     respond_to do |format|
-      format.json {render json: {state: {:code => 1}, :data => {message: "Venue deleted successfully." } }}
+      format.json {render json: {:success => true, :data => {message: "Venue deleted successfully." } }}
       format.html {redirect_to api_v1_venues_path}
     end
   end

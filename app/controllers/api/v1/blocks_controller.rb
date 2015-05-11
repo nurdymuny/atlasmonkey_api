@@ -4,7 +4,7 @@ class Api::V1::BlocksController < ApplicationController
     @venue = Venue.find(params[:venue_id])
     @blocks = @venue.blocks
     respond_to do |format|
-      format.json { render json: {state: {:code => 1}, :data => {venues: @venue.as_json(include: :blocks) } }}
+      format.json { render json: {:success => true, :data => {venues: @venue.as_json(include: :blocks) } }}
       format.html {}
     end
   end
@@ -19,10 +19,10 @@ class Api::V1::BlocksController < ApplicationController
     @block = @venue.blocks.new(block_params)
     respond_to do |format|
       if @block.save
-        format.json {render json: {state: {:code => 1}, :data => {message: "Block added successfully." } }}
+        format.json {render json: {:success => true, :data => {message: "Block added successfully." } }}
         format.html {redirect_to api_v1_venue_blocks_path(@venue)}
       else
-        format.json {render json: {state: {:code => 0}, :data => {message: @block.errors.full_messages } }}
+        format.json {render json: {:success => false, :data => {message: @block.errors.full_messages } }}
         format.html {render :new}
       end
     end
@@ -38,10 +38,10 @@ class Api::V1::BlocksController < ApplicationController
     @block = @venue.blocks.find(params[:id])
     respond_to do |format|
       if @block.update_attributes(block_params)
-        format.json {render json: {state: {:code => 1}, :data => {message: "Block updated successfully." } }}
+        format.json {render json: {:success => true, :data => {message: "Block updated successfully." } }}
         format.html {redirect_to api_v1_venue_blocks_path(@venue)}
       else
-        format.json {render json: {state: {:code => 0}, :data => {message: @block.errors.full_messages } }}
+        format.json {render json: {:success => false , :data => {message: @block.errors.full_messages } }}
         format.html {render :edit}
       end
     end
@@ -52,7 +52,7 @@ class Api::V1::BlocksController < ApplicationController
     @block = @venue.blocks.find(params[:id])
     @block.destroy
     respond_to do |format|
-      format.json {render json: {state: {:code => 1}, :data => {message: "Block deleted successfully." } }}
+      format.json {render json: {:success => true , :data => {message: "Block deleted successfully." } }}
       format.html {redirect_to api_v1_venue_blocks_path(@venue)}
     end
   end

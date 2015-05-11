@@ -8,7 +8,7 @@ class Api::V1::SeatsController < ApplicationController
     @venue = @block.venue
     @all_seats = @block.seats
      respond_to do |format|
-      format.json { render json: {state: {:code => 1}, :data => {seats: @all_seats} }}
+      format.json { render json: {:success => true , :data => {seats: @all_seats} }}
       format.html { }
     end
   end
@@ -20,10 +20,10 @@ class Api::V1::SeatsController < ApplicationController
   def create
     respond_to do |format|
       if @seat.save
-        format.json {render json: {state: {:code => 1}, :data => {message: "Seat added successfully." } }}
+        format.json {render json: {:success => true , :data => {message: "Seat added successfully." } }}
         format.html {redirect_to api_v1_block_seat_path(@block,@seat),notice: "Seat added successfully." }
       else
-        format.json {render json: {state: {:code => 0}, :data => {message: @seat.errors.full_messages } }}
+        format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
         format.html {render :new}
       end
     end
@@ -38,10 +38,10 @@ class Api::V1::SeatsController < ApplicationController
   def update
     respond_to do |format|
       if @seat.update_attributes(seats_params)
-        format.json {render json: {state: {:code => 1}, :data => {message: "Seat updated successfully." } }}
+        format.json {render json: {:success => true, :data => {message: "Seat updated successfully." } }}
         format.html {redirect_to api_v1_block_seat_path(@block,@seat)}
       else
-        format.json {render json: {state: {:code => 0}, :data => {message: @seat.errors.full_messages } }}
+        format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
         format.html {render :edit}
       end
     end
@@ -51,11 +51,11 @@ class Api::V1::SeatsController < ApplicationController
   def destroy 
     if @seat.destroy
       respond_to do |format|
-        format.json {render json: {state: {:code => 1}, :data => {message: "Seat deleted successfully." } }}
+        format.json {render json: {:success => true, :data => {message: "Seat deleted successfully." } }}
         format.html {redirect_to api_v1_block_seats_path(@block)}
       end
     else
-      format.json {render json: {state: {:code => 0}, :data => {message: @seat.errors.full_messages } }}
+      format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
       format.html {redirect_to api_v1_block_seats_path(@block)}
     end
 
