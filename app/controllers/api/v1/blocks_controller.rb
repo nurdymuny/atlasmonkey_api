@@ -3,9 +3,7 @@ class Api::V1::BlocksController < ApplicationController
   def index
     @venue = Venue.find(params[:venue_id])
     @blocks = @venue.blocks
-    
     render json: {:success => true, :data => {venue: @venue.as_json(include: :blocks) } }
-    
   end
   
 end
