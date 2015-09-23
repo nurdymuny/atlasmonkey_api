@@ -9,3 +9,5 @@
   <%=f.text_field :top_right, placeholder: "Top Right seat Lat, Long" %><br/><br/>
   <%= f.submit "Update" %>
 <% end %>
+<br/>
+<%= link_to "Go Back", venue_blocks_path(@venue),class: "btn btn-primary" %>
