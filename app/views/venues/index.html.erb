@@ -9,16 +9,16 @@
     </div>
   </div>
   <br/><br/>
-  <% if @venues.present? %>
-    <table class="table table-responsive table-bordered">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
+  <table class="table table-responsive table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @venues.present? %>
         <% @venues.each do |venue| %>
           <tr>
             <td><%= venue.name%></td>
@@ -26,10 +26,14 @@
             <td>
               <%=link_to "Edit", edit_venue_path(venue), method: :get, class: "btn btn-primary" %>
               <%=link_to "Manage", venue_path(venue), method: :get, class: "btn btn-primary" %>
-              <%=link_to "Delete", venue_path(venue), method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure?"} %>
+              <%=link_to "Delete", venue_path(venue), method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure, you want to delete this venue?"} %>
             </td>
         <% end %>
-      </tbody>
-    </table>
-  <% end %>
+      <% else %>
+        <tr>
+          <td colspan="3">Venues are not present</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>  
 </div>
