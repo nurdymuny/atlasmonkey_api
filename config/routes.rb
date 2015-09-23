@@ -7,12 +7,10 @@ Rails.application.routes.draw do
   get '/api/v1/block/seats/:venue_id/:block_id' => 'api/v1/seats#index', :as => 'get_seats_of_block'
   
   resources :venues do
-    resources :blocks
+    resources :blocks do
+      resources :seats
+    end
   end
-  resources :blocks, only: [] do
-    resources :seats
-  end
-  
   
   namespace :api do
     namespace :v1 do

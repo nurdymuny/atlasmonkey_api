@@ -1,8 +1,10 @@
-<h1> Edit Seat  </h1>
-<%= form_for @seat, url: block_seat_path ,method: :patch do |f| %>
+<h1> Edit seat for block </h1>
+<%= form_for @seat, url: venue_block_seat_path(@venue, @block, @seat) ,method: :patch do |f| %>
   <%= f.hidden_field :block_id,:value => @block.id %>
   <%=f.text_field :seat_number, placeholder: "Seat_number" %><br/><br/>
   <%=f.text_field :latitude, placeholder: "Latitude of Seat" %><br/><br/>
   <%=f.text_field :longitude, placeholder: "Longitude of seat" %><br/><br/>
   <%= f.submit "Update" %>
 <% end %>
+<br/>
+<%= link_to "Go Back", venue_block_seats_path(@venue, @block),class: "btn btn-primary" %>

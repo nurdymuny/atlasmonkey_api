@@ -1,11 +1,10 @@
 class SeatsController < ApplicationController
-  before_action :find_block, only:[:new,:create,:show,:index,:edit,:update,:destroy]
+  before_action :find_block
   before_action :find_seat, only: [:show,:edit,:update,:destroy]
   before_filter :initialize_seat ,only: [:create]
   load_and_authorize_resource
 
   def index
-    @venue = @block.venue
     @all_seats = @block.seats
      respond_to do |format|
       format.json { render json: {:success => true , :data => {seats: @all_seats} }}
@@ -21,7 +20,7 @@ class SeatsController < ApplicationController
     respond_to do |format|
       if @seat.save
         format.json {render json: {:success => true , :data => {message: "Seat added successfully." } }}
-        format.html {redirect_to block_seat_path(@block,@seat),notice: "Seat added successfully." }
+        format.html {redirect_to venue_block_seats_path(@venue, @block),notice: "Seat added successfully." }
       else
         format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
         format.html {render :new}
@@ -39,7 +38,7 @@ class SeatsController < ApplicationController
     respond_to do |format|
       if @seat.update_attributes(seats_params)
         format.json {render json: {:success => true, :data => {message: "Seat updated successfully." } }}
-        format.html {redirect_to block_seat_path(@block,@seat)}
+        format.html {redirect_to venue_block_seats_path(@venue, @block)}
       else
         format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
         format.html {render :edit}
@@ -52,11 +51,11 @@ class SeatsController < ApplicationController
     if @seat.destroy
       respond_to do |format|
         format.json {render json: {:success => true, :data => {message: "Seat deleted successfully." } }}
-        format.html {redirect_to block_seats_path(@block)}
+        format.html {redirect_to venue_block_seats_path(@venue, @block)}
       end
     else
       format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
-      format.html {redirect_to block_seats_path(@block)}
+      format.html {redirect_to venue_block_seats_path(@block)}
     end
 
   end
@@ -69,7 +68,8 @@ class SeatsController < ApplicationController
   end
 
   def find_block
-    @block = Block.find(params[:block_id])
+    @venue = Venue.find(params[:venue_id])
+    @block = @venue.blocks.find(params[:block_id])
   end
 
   def find_seat
