@@ -1,8 +1,2 @@
 <h2>Edit Venue</h2>
-<%=form_for @venue, url: venue_path(@venue), method: :put do |f| %>
-  <%=f.text_field :name, placeholder: "Venue Name" %><br/><br/>
-  <%=f.text_field :location, placeholder: "Location" %><br/><br/>
-  <%= f.submit "Update" %>
-<% end %>
-<br/>
-<%= link_to "Go Back", venues_path,class: "btn btn-primary" %>
+<%= render partial: "/venues/form" %>

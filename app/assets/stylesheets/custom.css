@@ -27,3 +27,11 @@ td, th {
 button.close {
   margin-top: -3px;
 }
+
+.form-group {
+  width: 50%;
+}
+
+form {
+  width: 50%;
+}

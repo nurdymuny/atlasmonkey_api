@@ -1,8 +1,2 @@
-<h2>Create new Venue</h2>
-<%=form_for @venue, url: venues_path do |f| %>
-  <%=f.text_field :name, placeholder: "Venue Name" %><br/><br/>
-  <%=f.text_field :location, placeholder: "Location" %><br/><br/>
-  <%= f.submit "Create" %>
-<% end %>
-<br/>
-<%= link_to "Go Back", venues_path,class: "btn btn-primary" %>
+<h2>Create New Venue</h2>
+<%= render partial: "/venues/form" %>

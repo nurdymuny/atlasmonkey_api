@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-md-12">
+    <%= form_for [@venue, @block] do |f| %>
+      <%= f.hidden_field :venue_id %>
+      <div class="form-group">
+        <%= f.text_field :name, class: "form-control", placeholder: "Name" %>
+      </div>
+      <div class="form-group">
+        <%= f.text_field :no_of_seats, class: "form-control", placeholder: "No of Seats" %>
+      </div>
+      <div class="form-group">
+        <%= f.text_field :left, class: "form-control", placeholder: "Left seat Lat, Long" %>
+      </div>
+      <div class="form-group">
+        <%= f.text_field :right, class: "form-control", placeholder: "Right seat Lat, Long" %>
+      </div>
+      <div class="form-group">
+        <%= f.text_field :top_left, class: "form-control", placeholder: "Top Left seat Lat, Long" %>
+      </div>
+      <div class="form-group">
+        <%= f.text_field :top_right, class: "form-control", placeholder: "Top Right seat Lat, Long" %>
+      </div>
+      <div class="form-group">
+        <%= f.submit f.object.new_record? ? 'Create' : 'Update', class: "btn btn-primary" %>
+        <%= link_to "Go Back", venue_blocks_path(@venue), class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
