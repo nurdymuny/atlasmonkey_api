@@ -57,7 +57,7 @@ class VenuesController < ApplicationController
     @venue.destroy
     respond_to do |format|
       format.json {render json: {:success => true, :data => {message: "Venue deleted successfully." } }}
-      format.html {redirect_to venues_path}
+      format.html {redirect_to venues_path, notice: "Venue deleted successfully."}
     end
   end
   
