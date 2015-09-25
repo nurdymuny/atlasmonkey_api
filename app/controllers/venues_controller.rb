@@ -17,10 +17,13 @@ class VenuesController < ApplicationController
     respond_to do |format|
       if @venue.save
         format.json {render json: {:success => true, :data => {message: "Venue added successfully." } }}
-        format.html {redirect_to venues_path}
+        format.html {redirect_to venues_path, notice: "Venue added successfully."}
       else
         format.json {render json: {:success => false , :data => {message: @venue.errors.full_messages } }}
-        format.html {render :new}
+        format.html {
+          flash.now[:error] = @venue.errors.full_messages
+          render :new
+        }
       end
     end
   end
@@ -38,10 +41,13 @@ class VenuesController < ApplicationController
     respond_to do |format|
       if @venue.update_attributes(venue_params)
         format.json {render json: {:success => true, :data => {message: "Venue updated successfully." } }}
-        format.html {redirect_to venues_path}
+        format.html {redirect_to venues_path, notice: "Venue updated successfully."}
       else
         format.json {render json: {:success => false, :data => {message: @venue.errors.full_messages } }}
-        format.html {render :edit}
+        format.html {
+          flash.now[:error] =  @venue.errors.full_messages
+          render :edit
+        }
       end
     end
   end

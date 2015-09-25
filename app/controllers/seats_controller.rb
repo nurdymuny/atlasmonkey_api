@@ -23,7 +23,10 @@ class SeatsController < ApplicationController
         format.html {redirect_to venue_block_seats_path(@venue, @block),notice: "Seat added successfully." }
       else
         format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
-        format.html {render :new}
+        format.html {
+          flash.now[:error] = @seat.errors.full_messages
+          render :new
+        }
       end
     end
   end
@@ -38,28 +41,24 @@ class SeatsController < ApplicationController
     respond_to do |format|
       if @seat.update_attributes(seats_params)
         format.json {render json: {:success => true, :data => {message: "Seat updated successfully." } }}
-        format.html {redirect_to venue_block_seats_path(@venue, @block)}
+        format.html {redirect_to venue_block_seats_path(@venue, @block), notice: "Seat updated successfully."}
       else
         format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
-        format.html {render :edit}
+        format.html {
+          flash.now[:error] = @seat.errors.full_messages
+          render :edit
+        }
       end
     end
-
   end
 
   def destroy 
-    if @seat.destroy
-      respond_to do |format|
-        format.json {render json: {:success => true, :data => {message: "Seat deleted successfully." } }}
-        format.html {redirect_to venue_block_seats_path(@venue, @block)}
-      end
-    else
-      format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
-      format.html {redirect_to venue_block_seats_path(@block)}
-    end
-
+    @seat.destroy
+    respond_to do |format|
+      format.json {render json: {:success => true, :data => {message: "Seat deleted successfully." } }}
+      format.html {redirect_to venue_block_seats_path(@venue, @block), notice: "Seat deleted successfully."}
+    end    
   end
-
 
   private
 
@@ -79,6 +78,6 @@ class SeatsController < ApplicationController
 
   def initialize_seat
     find_block
-     @seat = @block.seats.new(seats_params)
+    @seat = @block.seats.new(seats_params)
   end
 end

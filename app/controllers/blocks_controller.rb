@@ -20,10 +20,13 @@ class BlocksController < ApplicationController
     respond_to do |format|
       if @block.save
         format.json {render json: {:success => true, :data => {message: "Block added successfully." } }}
-        format.html {redirect_to venue_blocks_path(@venue)}
+        format.html {redirect_to venue_blocks_path(@venue), notice: "Block added successfully."}
       else
         format.json {render json: {:success => false, :data => {message: @block.errors.full_messages } }}
-        format.html {render :new}
+        format.html {
+          flash.now[:error] = @block.errors.full_messages
+          render :new
+        }
       end
     end
   end
@@ -38,10 +41,13 @@ class BlocksController < ApplicationController
     respond_to do |format|
       if @block.update_attributes(block_params)
         format.json {render json: {:success => true, :data => {message: "Block updated successfully." } }}
-        format.html {redirect_to venue_blocks_path(@venue)}
+        format.html {redirect_to venue_block_path(@venue, @block), notice: "Block updated successfully."}
       else
         format.json {render json: {:success => false , :data => {message: @block.errors.full_messages } }}
-        format.html {render :edit}
+        format.html {
+          flash.now[:error] = @block.errors.full_messages
+          render :edit
+        }
       end
     end
   end
@@ -50,7 +56,7 @@ class BlocksController < ApplicationController
     @block.destroy
     respond_to do |format|
       format.json {render json: {:success => true , :data => {message: "Block deleted successfully." } }}
-      format.html {redirect_to venue_blocks_path(@venue)}
+      format.html {redirect_to venue_blocks_path(@venue), notice: "Block deleted successfully."}
     end
   end
   

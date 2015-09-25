@@ -1,7 +1,7 @@
 <h2>Create new Venue</h2>
 <%=form_for @venue, url: venues_path do |f| %>
-  <%=f.text_field :name, placeholder: "Venue Name"  %><br/><br/>
-  <%=f.text_field :location, placeholder: "Location"  %><br/><br/>
+  <%=f.text_field :name, placeholder: "Venue Name" %><br/><br/>
+  <%=f.text_field :location, placeholder: "Location" %><br/><br/>
   <%= f.submit "Create" %>
 <% end %>
 <br/>

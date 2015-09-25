@@ -14,3 +14,16 @@ td, th {
 }
 
 .nopadding {padding: 0;}
+
+#flash_messages {
+  padding-left: 20%;
+  padding-right: 20%;
+}
+
+#flash_messages div {
+  padding: 8px;
+}
+
+button.close {
+  margin-top: -3px;
+}

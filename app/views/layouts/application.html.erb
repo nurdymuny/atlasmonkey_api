@@ -9,7 +9,7 @@
 <body>
 
 <h3><%= link_to "signout", destroy_user_session_path,class:"pull-right " if current_user.present? %></h3>
-
+<%= render partial: "/shared/flash_messages" %>
 <%= yield %>
 
 </body>
