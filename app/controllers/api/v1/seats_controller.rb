@@ -15,4 +15,13 @@ class Api::V1::SeatsController < ApplicationController
     end
   end
   
+  def get_seat_detail
+    @seats = current_user.seats
+    if @seats.present?
+      render json: {:success => true, :data => { seats: @seats.as_json(except: [:created_at, :updated_at]) } }
+    else
+      render json: { :success => false, :errors => "No seat exist for the logged in user"}
+    end
+  end
+  
 end

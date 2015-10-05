@@ -5,6 +5,7 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
     
     if @user.try(:valid_password?, params[:user][:password]) 
       token = @user.generate_api_token
+      sign_in @user
       render  :status => 200,
               :json => { :success => true,
               :info => "Logged in",

@@ -8,7 +8,10 @@ class Ability
          can :manage, Venue
          can :manage, Block
          can :manage, Seat
-      else
+    elsif user
+      can [:get_seat_detail], Seat
+      can :manage, :home
+    else
          can :manage, :home
      end
     #
