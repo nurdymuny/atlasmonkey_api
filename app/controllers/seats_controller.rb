@@ -63,7 +63,7 @@ class SeatsController < ApplicationController
   private
 
   def seats_params
-    params.require(:seat).permit(:block_id,:seat_number,:latitude,:longitude)
+    params.require(:seat).permit(:block_id, :seat_number, :latitude, :longitude, :user_id)
   end
 
   def find_block

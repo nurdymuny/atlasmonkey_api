@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   validates_presence_of :password_confirmation
             
   has_many :user_tokens, dependent: :destroy
+  has_many :seats, dependent: :destroy
   def generate_api_token
    token = SecureRandom.hex(32)
    5.times do

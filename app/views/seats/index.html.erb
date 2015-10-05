@@ -19,6 +19,7 @@
       <tr>
         <th>Seat Number </th>
         <th>Block Id</th>
+        <th>User</th>
         <th>Longitude</th>
         <th>Latitude</th>
         <th>Actions </th>
@@ -30,6 +31,7 @@
           <tr>
             <td><%= seat.seat_number %></td>
             <td><%= seat.block_id %></td>
+            <td><%= seat.user.present? ? seat.user.email : "Need to assign user for this seat" %></td>
             <td><%= seat.longitude %></td>
             <td><%= seat.latitude %></td>
             <td>
