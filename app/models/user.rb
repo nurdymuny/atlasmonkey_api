@@ -3,6 +3,9 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+  
+  validates_presence_of :password_confirmation
+            
   has_many :user_tokens, dependent: :destroy
   def generate_api_token
    token = SecureRandom.hex(32)

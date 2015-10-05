@@ -1,4 +1,5 @@
 class Api::V1::RegistrationsController < Api::V1::ApiBaseController
+  
   def create
     user = User.new(user_params)
     #user.skip_confirmation!
@@ -38,7 +39,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
   private
 
   def user_params
-    params.require(:user).permit(:email,:password)
+    params.require(:user).permit(:email, :password, :password_confirmation)
   end 
 
 

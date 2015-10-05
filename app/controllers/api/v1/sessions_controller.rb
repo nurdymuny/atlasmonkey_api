@@ -18,20 +18,26 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
 
   def destroy
     token = UserToken.find_by_auth_token(request.headers['auth-token'])
-    return failure if token.blank?
-    token.destroy
-    render :status => 200,
-           :json => { :success => true,
-                      :info => "Logged out",
-                      :data => { :auth_token => token }
-                    }
+    if token.present?
+      token.destroy
+      render :status => 200,
+             :json => { :success => true,
+                        :info => "Logged out",
+                        :data => { :auth_token => token }
+                      }
+    else
+      render :status => 401,
+             :json => { :success => false,
+                        :info => "Auth token is not valid",
+                        :data => {} } and return
+    end
   end
   
   protected
     def failure
       render :status => 401,
              :json => { :success => false,
-                        :info => "Email and password not match",
+                        :info => "Email or password not match",
                         :data => {} } and return
     end    
 end 
