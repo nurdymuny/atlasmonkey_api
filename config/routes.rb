@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       #post '/add_ticket_detail' => 'tickets#add_ticket_detail'
       get '/get_ticket_detail' => 'tickets#get_ticket_detail'
       get '/get_seat_detail/:seat_number' => 'seats#get_seat_detail'
+      get '/get_all_seat_details' => 'seats#get_all_seat_details'
       resources :venues, only: [] do
         resources :blocks, only: [:index] do
           resources :seats, only: [:index]

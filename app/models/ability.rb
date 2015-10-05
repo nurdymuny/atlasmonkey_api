@@ -9,7 +9,7 @@ class Ability
          can :manage, Block
          can :manage, Seat
     elsif user
-      can [:get_seat_detail], Seat
+      can [:get_seat_detail, :get_all_seat_details], Seat
       can :manage, :home
     else
          can :manage, :home
