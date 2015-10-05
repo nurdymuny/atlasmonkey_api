@@ -1,4 +1,5 @@
 class Api::V1::SeatsController < ApplicationController
+  load_and_authorize_resource :except => [:index]
   
   def index
     @venue = Venue.find_by_id(params[:venue_id])
