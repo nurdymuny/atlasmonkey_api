@@ -8,4 +8,4 @@
 puts "Starting db:seed"
 puts "================"
 puts "Creating admin"
-User.create(email: "admin@admin.com",password: "admin123",is_admin: true)
+User.create(email: "admin@admin.com",password: "admin123", password_confirmation: "admin123" ,is_admin: true)

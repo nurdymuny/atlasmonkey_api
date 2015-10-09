@@ -35,3 +35,11 @@ button.close {
 form {
   width: 50%;
 }
+
+.fields .form-group {
+  width: auto !important;
+}
+
+.delete_path {
+  margin-bottom: 10px;
+}

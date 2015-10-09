@@ -10,6 +10,7 @@ class VenuesController < ApplicationController
   
   def new
     @venue = Venue.new
+    @venue.lat_longs.build
   end
   
   def create
@@ -22,6 +23,7 @@ class VenuesController < ApplicationController
         format.json {render json: {:success => false , :data => {message: @venue.errors.full_messages } }}
         format.html {
           flash.now[:error] = @venue.errors.full_messages
+          @venue.lat_longs.build if @venue.lat_longs.blank?
           render :new
         }
       end
@@ -34,6 +36,7 @@ class VenuesController < ApplicationController
   
   def edit
     @venue = Venue.find(params[:id])
+    @venue.lat_longs.build if @venue.lat_longs.blank?
   end
   
   def update
@@ -63,6 +66,6 @@ class VenuesController < ApplicationController
   
   private
     def venue_params
-      params.require(:venue).permit(:name, :location, :start, :end)
+      params.require(:venue).permit(:name, :location, lat_longs_attributes: [:id, :start, :end, :_destroy])
     end
 end
