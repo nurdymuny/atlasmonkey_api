@@ -8,6 +8,7 @@ class Ability
       can :manage, Venue
       can :manage, Block
       can :manage, Seat
+      can :manage, Level
     elsif user
       can [:get_seat_detail, :get_all_seat_details], Seat
       can :manage, :home

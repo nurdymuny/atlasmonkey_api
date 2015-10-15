@@ -1,0 +1,38 @@
+<br/><br/>
+<div class="col-md-12">
+  <div class="col-md-12 nopadding">
+    <div class="col-md-6 nopadding">
+      <h2 style="margin: 0;">Block</h2>
+    </div>
+    <div class="col-md-6 nopadding text-right">
+      <%#= link_to "+ Add New Level", new_venue_block_path(@venue), method: :get, class: "btn btn-default pull-right" %>
+      <%= link_to "Go Back", venue_levels_path(@venue),class: "btn btn-primary" %>
+    </div>
+  </div>
+  <br/><br/>
+  <table class="table table-responsive table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @level.present? %>
+        <tr>
+          <td><%= @level.name%></td>
+          <td>
+            <%=link_to "Edit", edit_venue_level_path(@venue, @level), method: :get, class: "btn btn-primary" %>
+            <%#=link_to "Manage Seats", venue_block_seats_path(@venue, @block), method: :get, class: "btn btn-primary" %>
+            <%=link_to "Manage Blocks", venue_level_blocks_path(@venue, @level), method: :get, class: "btn btn-primary" %>
+            <%=link_to "Delete", venue_level_path(@venue, @level), method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure, you want to delete this block?"} %>
+          </td>
+        </tr>
+      <% else %>
+        <tr>
+          <td colspan="7">Block is not present</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
