@@ -20,7 +20,7 @@ class SeatsController < ApplicationController
     respond_to do |format|
       if @seat.save
         format.json {render json: {:success => true , :data => {message: "Seat added successfully." } }}
-        format.html {redirect_to venue_block_seats_path(@venue, @block),notice: "Seat added successfully." }
+        format.html {redirect_to venue_level_block_seats_path(@venue, @level, @block),notice: "Seat added successfully." }
       else
         format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
         format.html {
@@ -41,7 +41,7 @@ class SeatsController < ApplicationController
     respond_to do |format|
       if @seat.update_attributes(seats_params)
         format.json {render json: {:success => true, :data => {message: "Seat updated successfully." } }}
-        format.html {redirect_to venue_block_seats_path(@venue, @block), notice: "Seat updated successfully."}
+        format.html {redirect_to venue_level_block_seats_path(@venue, @level, @block), notice: "Seat updated successfully."}
       else
         format.json {render json: {:success => false, :data => {message: @seat.errors.full_messages } }}
         format.html {
@@ -56,7 +56,7 @@ class SeatsController < ApplicationController
     @seat.destroy
     respond_to do |format|
       format.json {render json: {:success => true, :data => {message: "Seat deleted successfully." } }}
-      format.html {redirect_to venue_block_seats_path(@venue, @block), notice: "Seat deleted successfully."}
+      format.html {redirect_to venue_level_block_seats_path(@venue, @level, @block), notice: "Seat deleted successfully."}
     end    
   end
 
@@ -68,7 +68,8 @@ class SeatsController < ApplicationController
 
   def find_block
     @venue = Venue.find(params[:venue_id])
-    @block = @venue.blocks.find(params[:block_id])
+    @level = @venue.levels.find(params[:level_id])
+    @block = @level.blocks.find(params[:block_id])
   end
 
   def find_seat

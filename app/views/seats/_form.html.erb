@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-12">
-    <%= form_for [@venue, @block, @seat] do |f| %>
+    <%= form_for [@venue, @level, @block, @seat] do |f| %>
       <div class="form-group">
         <%= f.text_field :seat_number, class: "form-control", placeholder: "Seat Number" %>
       </div>
@@ -15,7 +15,7 @@
       </div>
       <div class="form-group">
         <%= f.submit f.object.new_record? ? 'Create' : 'Update', class: "btn btn-primary" %>
-        <%= link_to "Go Back", venue_block_seats_path(@venue, @block), class: "btn btn-primary" %>
+        <%= link_to "Go Back", venue_level_block_seats_path(@venue, @level, @block), class: "btn btn-primary" %>
       </div>
     <% end %>    
   </div>

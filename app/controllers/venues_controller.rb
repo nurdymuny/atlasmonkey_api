@@ -1,5 +1,6 @@
 class VenuesController < ApplicationController
   load_and_authorize_resource
+  
   def index
     @venues = Venue.all
     respond_to do |format|
@@ -11,6 +12,7 @@ class VenuesController < ApplicationController
   def new
     @venue = Venue.new
     @venue.lat_longs.build
+    @venue.levels.build
   end
   
   def create
@@ -24,6 +26,7 @@ class VenuesController < ApplicationController
         format.html {
           flash.now[:error] = @venue.errors.full_messages
           @venue.lat_longs.build if @venue.lat_longs.blank?
+          @venue.levels.build if @venue.levels.blank?
           render :new
         }
       end
@@ -66,6 +69,7 @@ class VenuesController < ApplicationController
   
   private
     def venue_params
-      params.require(:venue).permit(:name, :location, lat_longs_attributes: [:id, :start, :end, :_destroy])
+      params.require(:venue).permit(:name, :location, lat_longs_attributes: [:id, :start, :end, :_destroy],
+                                    levels_attributes: [:id, :name, :_destroy])
     end
 end
