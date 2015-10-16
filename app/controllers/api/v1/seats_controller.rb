@@ -32,7 +32,11 @@ class Api::V1::SeatsController < ApplicationController
   def get_seat_detail
     @seat = current_user.seats.find_by_seat_number(params[:seat_number])
     if @seat.present?
-      render json: {:success => true, :data => { seat: @seat.as_json(except: [:created_at, :updated_at]) } }
+      @block = @seat.block
+      @level = @block.level
+      @venue = @level.venue
+      render json: {:success => true, :data => {seat: @seat.as_json(except: [:created_at, :updated_at]).merge(
+                                                venue_id: @venue.id, level_id: @level.id) } }
     else
       render json: { :success => false, :errors => "Seat is not exit for the logged in user"}
     end

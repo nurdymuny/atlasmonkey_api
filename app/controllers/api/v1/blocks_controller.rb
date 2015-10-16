@@ -1,5 +1,6 @@
 class Api::V1::BlocksController < ApplicationController
   load_and_authorize_resource :except => [:index]
+  
   def index
     @venue = Venue.find_by_id(params[:venue_id])
     if @venue.present?
@@ -14,5 +15,4 @@ class Api::V1::BlocksController < ApplicationController
       render json: { :success => false, :errors => "No venue exist for the provided venue id"}
     end
   end
-  
 end
