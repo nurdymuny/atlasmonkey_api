@@ -28,8 +28,10 @@ Rails.application.routes.draw do
       get '/get_seat_detail/:seat_number' => 'seats#get_seat_detail'
       get '/get_all_seat_details' => 'seats#get_all_seat_details'
       resources :venues, only: [:show] do
-        resources :blocks, only: [:index] do
-          resources :seats, only: [:index]
+        resources :levels, only: [] do
+          resources :blocks, only: [:index] do
+            resources :seats, only: [:index]
+          end
         end
       end
     end
