@@ -23,7 +23,10 @@ class Api::V1::SeatsController < ApplicationController
   def get_all_seat_details
     @seats = current_user.seats
     if @seats.present?
-      render json: {:success => true, :data => { seats: @seats.as_json(except: [:created_at, :updated_at]) } }
+      user_seats = []
+      @seats.map {|seat, block=seat.block| user_seats << seat.attributes.merge(level_id: block.level_id,
+                  venue_id: block.level.venue_id) }
+      render json: {:success => true, :data => { seats: user_seats } }
     else
       render json: { :success => false, :errors => "No seat exist for the logged in user"}
     end
