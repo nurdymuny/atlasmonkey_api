@@ -13,6 +13,7 @@ class LevelsController < ApplicationController
   
   def new
     @level = @venue.levels.new
+    @level.lat_longs.build
   end
   
   def create
@@ -25,6 +26,7 @@ class LevelsController < ApplicationController
         format.json {render json: {:success => false, :data => {message: @level.errors.full_messages } }}
         format.html {
           flash.now[:error] = @level.errors.full_messages
+          @level.lat_longs.build if @level.lat_longs.blank?
           render :new
         }
       end
@@ -35,6 +37,7 @@ class LevelsController < ApplicationController
   end
   
   def edit
+    @level.lat_longs.build if @level.lat_longs.blank?
   end
   
   def update
@@ -46,6 +49,7 @@ class LevelsController < ApplicationController
         format.json {render json: {:success => false , :data => {message: @level.errors.full_messages } }}
         format.html {
           flash.now[:error] = @level.errors.full_messages
+          @level.lat_longs.build if @level.lat_longs.blank?
           render :edit
         }
       end
@@ -63,7 +67,7 @@ class LevelsController < ApplicationController
   private
   
   def level_params
-    params.require(:level).permit(:name)
+    params.require(:level).permit(:name, lat_longs_attributes: [:id, :start, :end, :_destroy])
   end
   
   def find_venue
