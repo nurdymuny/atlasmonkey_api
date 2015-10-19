@@ -11,8 +11,8 @@ class Api::V1::SeatsController < ApplicationController
           all_seats = []
           @block.seats.map {|seat| all_seats << seat.attributes.merge(level_id: @level.id,
                   level_name: @level.name) }
-          render json: {:success => true, :data => {block: @block.as_json(except: [:created_at, :updated_at]),
-                                                    seats: all_seats  } }
+          render json: {:success => true, :data => {block: @block.as_json(except: [:created_at, :updated_at]).merge(
+                                                    seats: all_seats)}}
         else
           render json: { :success => false, :errors => "No block exist for the provided block id"}
         end
