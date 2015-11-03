@@ -37,15 +37,18 @@ class Api::V1::SeatsController < ApplicationController
   end
   
   def get_seat_detail
-    @seat = current_user.seats.find_by_seat_number(params[:seat_number])
-    if @seat.present?
-      @block = @seat.block
-      @level = @block.level
-      @venue = @level.venue
-      render json: {:success => true, :data => {seat: @seat.as_json(except: [:created_at, :updated_at]).merge(
-                                                venue_id: @venue.id, level_id: @level.id) } }
-    else
-      render json: { :success => false, :errors => "Seat is not exit for the logged in user"}
+    if current_user.email == params[:email]
+      @seat = current_user.seats.where(user_id: current_user.id)[0]
+       #raise @seat.inspect
+      if @seat.present?
+        @block = Block.select("level_id").where(id: @seat.block_id)[0]
+        @level = Level.select("id, venue_id").where(id: @block.level_id)[0]
+        @venue = Venue.select("id, name").where(id: @level.venue_id)[0]
+        render json: {:success => true, :data => {seat: @seat.as_json(except: [:created_at, :updated_at]).merge(
+                                                  venue_id: @venue.id, venue_name: @venue.name, level_id: @level.id) } }
+      else
+        render json: { :success => false, :errors => "Seat is not exit for the logged in user"}
+      end
     end
   end
   
