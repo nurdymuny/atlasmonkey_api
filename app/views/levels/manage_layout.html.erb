@@ -1,0 +1,350 @@
+<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<h1 style="margin-left:0%; font-size:32px; color:black; font-weight: bold;">Edit Layout</h1>
+
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<% if @layout.present?
+     # raise @layout.inspect
+     @layout.each do |lay|
+      @x_size = lay.grid_size.split('x')[0]
+      @y_size = lay.grid_size.split('x')[1]
+      end%>
+    <%= label_tag :Grid_size  %>:&nbsp;&nbsp;
+    <span style=""><input type="text" id="rowcount" value="<%= @x_size %>" style="width: 3%;" /></span>
+    <span style="">x <input type="text" id="columncount" value="<%= @y_size %>" style="width: 3%;" /></span><br><br>
+<% else %>
+    <span style="">Grid: <input type="text" id="rowcount" value="10" style="width: 3%;" /></span>
+    <span style="">x <input type="text" id="columncount" value="20" style="width: 3%;" /></span><br><br>
+<% end %>
+    <%= form_for @level, method: 'POST' do |f| %>
+        <div class="field">
+
+
+
+          <%= f.label :Block_name  %>:&nbsp;&nbsp;
+          <%= collection_select(:block, :title, Block.where(level_id: params[:level_id]), :id, :name, {:prompt=>true}, {:class=>'block_name'}) %><br><br>
+          <%= f.hidden_field :id %>
+        </div>
+
+
+    <% end%>
+
+
+<%= form_for @venue do |f| %>
+    <%= f.hidden_field :id%>
+ <% end%>
+<%= button_tag :Update, class: 'update_btn', onclick: 'add_new_table();'%>
+<style>
+  .update_btn{
+      margin-left: 10%;
+  }
+  #rowcount{
+      width: 6%;
+  }
+  #columncount{
+      width: 6%;
+  }
+    select{
+        width: 20%;
+        height: 20px;
+        border: 1px solid black;
+    }
+    .create_table {
+        width: 85%;
+        height: 400px;
+        border: 1px solid black;
+        margin-left: -4%;
+        margin-top: 4%;
+    }
+    .td_cl_md {
+        margin-top: 45px;
+        border: 1px solid;
+        background-color: white;
+        width: 5% !important;
+        height: 8%;
+
+    }
+  .td_cl_lg {
+      margin-top: 45px;
+      border: 1px solid;
+      width: auto;
+      background-color: white;
+      /*width: 5% !important;*/
+      height: 8%;
+
+  }
+</style>
+<script>
+    $( document ).ready(function() {
+
+//function createTable(){
+
+        mytable = $('<table class="create_table sortable" id="text"></table>').attr({ id: "basicTable" });
+        var rows = new Number($("#rowcount").val());
+        var cols = new Number($("#columncount").val());
+        var tr = [];
+        for (var i = 0; i < rows; i++) {
+            var row = $('<tr></tr>').attr({ class: ["class1", "class2", "c"].join(' ') }).appendTo(mytable);
+            for (var j = 0; j < cols; j++) {
+                var cell = '#'+i.toString()+j.toString();
+                var cell_html = $(cell).html();
+                if(cols > 20 && cell_html == undefined){
+                    $("<td  id='"+i.toString()+j.toString()+"'>").attr({class: ["td_cl_lg"]}).appendTo(row);}
+                else{
+                    $("<td  id='"+i.toString()+j.toString()+"'>").attr({class: ["td_cl_md"]}).appendTo(row);}
+            }
+
+        }
+        // console.log("TTTTT:"+mytable.html());
+        mytable.appendTo("#box");
+
+
+    });
+    $(".grid").keypress(function (e) {
+        //if the letter is not digit then display error and don't type anything
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            //display error message
+            $("#errmsg").html("Digits Only").show().fadeOut(2000);
+            return false;
+        }
+    });
+
+</script>
+<%
+    # raise @seat_layout.inspect
+    @seat_layout.each do |layout|
+    @seat_layout_id = layout.id
+    @x_grid_ref = layout.x_grid_ref
+    @y_grid_ref = layout.y_grid_ref
+    @seat_number = layout.seat_number
+    @uuid_number = layout.uuid_number
+%>
+        <script>
+          $(document).ready(function(){
+              $("#<%= @x_grid_ref%><%= @y_grid_ref%>").addClass("td_cl_md");
+              $("#<%= @x_grid_ref%><%= @y_grid_ref%>").removeClass("td_cl_lg");
+             $("#<%= @x_grid_ref%><%= @y_grid_ref%>").html("<p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='25px' height='25px' style='margin-left:-11%;'  class='del_img' ></span><span class='img_none' onclick='del_item(<%= @seat_layout_id%>);'><img src='/assetsclose.png' style='width:23%; margin-top:-60%; float:right; margin-left:75%; cursor:pointer'></span>");
+          });
+        </script>
+<% end%>
+<script>
+
+    $(document).ready(function () {
+        $(".draggable").draggable( {
+            helper: 'clone',
+            revert: "invalid",
+
+            create: function(){$(this).data('position',$(this).position())},
+            cursorAt:{left:15},
+            cursor:'move',
+            start:function(){$(this).stop(true,true)},
+
+        });
+
+        $('#basicTable').find(".td_cl_md").droppable({
+
+            drop:function(event, ui){
+                if (ui.draggable[0].id) {
+                    $(this).append($(ui.helper).clone().draggable());
+                }
+                snapToMiddle(ui.draggable,$(this));
+                var table_col_val = event.target.attributes[0].value
+//                        localStorage.setItem('table_col_val', table_col_val);
+                currentList = localStorage["table_col_val"];
+                var regId = new Array();
+                console.log(currentList);
+                if(currentList)
+                    regId = JSON.parse(currentList);
+                regId.push(table_col_val);
+                localStorage['table_col_val']=JSON.stringify(regId);
+                $("#auto_fill").css("display", "block");
+                console.log(table_col_val);
+            }
+        });
+        $('#basicTable').find(".td_cl_lg").droppable({
+
+            drop:function(event, ui){
+                if (ui.draggable[0].id) {
+                    $(this).append($(ui.helper).clone().draggable());
+                }
+                snapToMiddle(ui.draggable,$(this));
+                var table_col_val = event.target.attributes[0].value
+//                        localStorage.setItem('table_col_val', table_col_val);
+                currentList = localStorage["table_col_val"];
+                var regId = new Array();
+                console.log(currentList);
+                if(currentList)
+                    regId = JSON.parse(currentList);
+                regId.push(table_col_val);
+                localStorage['table_col_val']=JSON.stringify(regId);
+                $("#auto_fill").css("display", "block");
+                console.log(table_col_val);
+            }
+        });
+        $("#img").draggable();
+
+
+        $("#img").droppable({
+            drop: function(event, ui) {
+                ui.draggable.remove();
+            }
+        });
+    });
+
+
+    function snapToMiddle(dragger, target){
+//        var topMove = target.position().top - dragger.data('position').top + (target.outerHeight(true) - dragger.outerHeight(true)) / 2;
+        var leftMove= target.position().left - dragger.data('position').left + (target.outerWidth(true) - dragger.outerWidth(true)) / 2;
+        if(dragger[0].id == 'two_table'){
+            var topMove = '20px';
+            var table_number = "2";
+        }
+        else if(dragger[0].id == 'four_table'){
+            var topMove = '58px'
+            var table_number = "4";
+        }
+        else if(dragger[0].id == 'six_table'){
+            var topMove = '95px';
+            var table_number = "6";
+        }
+//                localStorage.setItem('table_number', table_number);
+        currentList = localStorage["table_number"];
+        var regId = new Array();
+        console.log(currentList);
+        if(currentList)
+            regId = JSON.parse(currentList);
+        regId.push(table_number);
+        localStorage['table_number']=JSON.stringify(regId);
+        console.log(table_number);
+        dragger.animate({top:topMove,left:leftMove},{duration:600,easing:'easeOutBack'});
+    }
+
+    function boxsubmit(){
+        var seat_number = $("#seat_number").val();
+        var uuid_number = $("#uuid_number").val();
+//                localStorage.setItem('table_number', table_number);
+        currentList = localStorage["seat_number"];
+        currentList - localStorage["uuid_number"];
+        var regId = new Array();
+        console.log(currentList);
+        if(currentList)
+            regId = JSON.parse(currentList);
+        regId.push(seat_number);
+        localStorage['seat_number']=JSON.stringify(regId);
+        $("#auto_fill").css("display", "none");
+//                console.log(seat_number);
+        $("#seat_number").val('');
+        var UUId = new Array();
+        console.log(currentList);
+        if(currentList)
+            UUId = JSON.parse(currentList);
+        UUId.push(uuid_number);
+        localStorage['uuid_number']=JSON.stringify(UUId);
+        $("#auto_fill").css("display", "none");
+//                console.log(seat_number);
+        $("#uuid_number").val('');
+    }
+
+    function update_box(){
+        var restaurant_id = $("#layout_restaurants_id").val();
+        var already_table_number = $("#already_value").val();
+        var already_diner_id = $("#diner_id").val();
+//                localStorage.setItem('already_table_number', already_table_number);
+//                localStorage.setItem('already_diner_id', already_diner_id);
+        currentList = localStorage["already_table_number"];
+        var regId = new Array();
+        console.log(currentList);
+        if(currentList)
+            regId = JSON.parse(currentList);
+        regId.push(already_table_number);
+        localStorage['already_table_number']=JSON.stringify(regId);
+
+        currentList = localStorage["already_diner_id"];
+        var regId = new Array();
+        console.log(currentList);
+        if(currentList)
+            regId = JSON.parse(currentList);
+        regId.push(already_diner_id);
+        localStorage['already_diner_id']=JSON.stringify(regId);
+
+        $("#already_used").css("display", "none");
+        $("#already_value").val('');
+    }
+
+</script>
+<script>
+    function drag_poup_hide(){
+        $("#auto_fill").css("display", "none");
+        $("#seat_number").val('');
+        $(".ui-draggable-dragging").css("display","none");
+        localStorage.clear();
+    }
+
+</script>
+<script>
+    function del_item(id){
+        var level_id = $("#level_id").val();
+//        alert(id);
+        var data = {seat_id: id, level_id: level_id}
+        $.ajax({
+            type:'POST',
+            url: '/levels/delete_record',
+            data: data,
+            success: function(response){
+                location.reload();
+            }
+        });
+    }
+
+</script>
+<script>
+  function add_new_table(){
+
+    var level_id = $("#level_id").val();
+    var venue_id = $("#venue_id").val();
+    var block_id = $("#block_title").val();
+//      alert(block_id);
+    var table_col_val = JSON.parse(localStorage.getItem('table_col_val'));
+    var seat_number = JSON.parse(localStorage.getItem('seat_number'));
+    var uuid_number = JSON.parse(localStorage.getItem('uuid_number'));
+    var x_grid = $("#rowcount").val();
+    var y_grid = $("#columncount").val();
+//      alert(x_grid);
+    if(localStorage.getItem('seat_number') == undefined){
+        var type = '1';
+        var data = {level_id:level_id, venue_id: venue_id, type:type, x_grid:x_grid, y_grid: y_grid}
+    }else{
+        var type = '2';
+        var data = {level_id: level_id, venue_id: venue_id, type:type, seat_number:seat_number, table_col_val: table_col_val, uuid_number:uuid_number, block_id: block_id}
+    }
+      $.ajax({
+          type: 'POST',
+          url: '/levels/update_layout',
+          data: data,
+
+          success: function(response){
+              localStorage.clear();
+              console.log('ssss');
+          }
+
+      });
+  }
+</script>
+
+<div id="box">
+  <div id="auto_fill" style="width: 15%; height: 145px; z-index: 9999; background-color: grey; display: none; position:absolute; margin-top: 10%; margin-left: 10%; border-radius:5px;">
+    <form name="fname" method="post">
+      &nbsp;&nbsp;<span style="color: black; font-weight:bold;">Enter Seat No.</span><input type="text" id="seat_number" style="margin-left: 5%; margin-top: 5%;" required="required">
+      &nbsp;&nbsp;<span style="color: black; font-weight:bold;">Enter UID: </span><input type="text" id="uuid_number" required ="required" style="margin-left: 5%; margin-top: 5%;">
+      <span onclick="drag_poup_hide();"><img src="/assetsclose.png" style="width: 7%; position: absolute; top:-1%; right:1%; cursor: pointer;"></span><br>
+      <input type="button" value="Submit" style="margin-left: 33%; margin-top: 8%; background-color: #337ab7; color: white; border: 1px solid black; border-radius: 5px;" onclick="boxsubmit();">
+    </form>
+
+    </div>
+<p style="margin-left:90%; float:right; margin-right: 0.5%;">Table Panel</p>
+<div style="float: right; width: 10%; height: 260px; margin-left:2%; border: 2px solid gray; border-radius:5px; background-color: white;">
+  <p style="border-bottom: 1px solid gray; margin-left:10%;"><img class="draggable" id="two_table" src='/assetsTable2.png' width='25px' height='25px'></p>
+</div>
+
+</div>

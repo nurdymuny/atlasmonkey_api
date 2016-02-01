@@ -30,6 +30,7 @@
               <%= link_to "Edit", edit_venue_level_path(@venue, level), method: :get, class: "btn btn-primary" %>
               <%= link_to "Manage", venue_level_path(@venue, level), method: :get, class: "btn btn-primary" %>
               <%= link_to "Delete", venue_level_path(@venue, level), method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure, you want to delete this level?"} %>
+              <%= link_to "Manage Layout", manage_layout_path(venue_id: level.venue_id, level_id: level.id), method: :get, class: "btn btn-primary" %>
             </td>
           </tr>
         <% end %>

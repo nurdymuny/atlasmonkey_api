@@ -1,6 +1,7 @@
 class LevelsController < ApplicationController
-  before_action :find_venue
-  before_action :find_level, except: [:new, :create, :index]
+  before_action :find_venue, except: [:manage_layout, :update_layout, :delete_record]
+  before_action :find_level, except: [:new, :create, :index, :manage_layout, :update_layout, :delete_record]
+  skip_before_action :verify_authenticity_token
   load_and_authorize_resource
   
   def index
@@ -55,7 +56,128 @@ class LevelsController < ApplicationController
       end
     end
   end
-  
+
+  def manage_layout
+    @level = Level.where(venue_id: params[:venue_id]).where(id: params[:level_id])[0]
+    # raise @level.inspect
+    @venue = Venue.all.where(id: params[:venue_id])[0]
+    @layout = Layout.select("id, grid_size").where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])
+    @seat_layout = SeatLayout.where(venue_id: params[:venue_id]).where(level_id: params[:level_id])
+    # raise @seat_layout.inspect
+
+  end
+
+  def update_layout
+      # raise @x_size = params[:x_grid].inspect
+      if (params[:type] == '1')
+        @x_size = params[:x_grid]
+        @y_size = params[:y_grid]
+        @level_ids = params[:level_id]
+        @grid_size = @x_size.to_s+'x'+@y_size.to_s
+        # raise @grid_size.inspect
+        @layout = Layout.where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])[0]
+        if @layout.present?
+          @layout.update_attributes(grid_size: @grid_size, level_ids: @level_ids)
+          flash[:notice] = "Successfully updated"
+          render :js => 'window.location.reload()'
+        else
+          @layout = Layout.new
+          @layout[:grid_size] = params[:x_grid].to_s+'x'+params[:y_grid].to_s
+          @layout[:venue_id] = params[:venue_id]
+          @layout[:level_ids] = params[:level_id]
+          if @layout.save
+            flash[:notice] = "Successfully created"
+            render :js => 'window.location.reload()'
+          else
+            render :edit
+          end
+        end
+      elsif (params[:type] == '2')
+        @count = params[:seat_number].count
+        # raise @count
+        puts @count
+        index = 0
+        while (index < @count)
+            puts index
+            @block = Block.where(level_id: params[:level_id])[0]
+            @block_id = @block.id
+            # raise @block_id.inspect
+            @seat_number = params[:seat_number][index]
+            @uuid_number = params[:uuid_number][index]
+            # raise @seat_number.inspect
+
+            @table_col_val = params[:table_col_val][index]
+            # @table_col_val = @table_col[0]
+            # raise @table_col_val.inspect
+            if @table_col_val.to_s.length >= 3
+              @y_ref = @table_col_val[-2, 2]
+              # raise @x_ref.inspect
+            else
+              @y_ref = @table_col_val[-1, 1]
+            end
+            # raise @x_ref.inspect
+            if @table_col_val.to_s.length > 3
+              @x_ref = @table_col_val[0,2]
+            else
+              @x_ref = @table_col_val[0,1]
+            end
+
+            # raise @y_ref.inspect
+            @Layout = Layout.where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])[0]
+            @SeatLayout = SeatLayout.new
+            @SeatLayout[:layout_id] = @Layout.id
+            @SeatLayout[:seat_number] = @seat_number
+            # raise @seat_number.inspect
+            @SeatLayout[:uuid_number] = @uuid_number
+            @SeatLayout[:level_id] = params[:level_id]
+            @SeatLayout[:venue_id] = params[:venue_id]
+            @SeatLayout[:block_id] = @block_id
+            @SeatLayout[:x_grid_ref] = @x_ref
+            @SeatLayout[:y_grid_ref] = @y_ref
+            if @SeatLayout.save
+              if @Layout.seat_layout_ids != nil
+                if not @Layout.seat_layout_ids.empty?
+                  @Layout.update_attribute(:seat_layout_ids, @Layout.seat_layout_ids+'|'+@SeatLayout.id.to_s)
+                else
+                  @Layout.update_attribute(:seat_layout_ids, @SeatLayout.id.to_s)
+                end
+              else
+                @Layout.update_attribute(:seat_layout_ids, @SeatLayout.id.to_s)
+              end
+
+            else
+              render :edit
+            end
+            index = index + 1;
+        end
+        flash[:notice] = "Successfully updated"
+        render :js => 'window.location.reload()'
+        else
+          flash[:notice] = "Successfully updated"
+          render :js => 'window.location.reload()'
+        end
+
+  end
+
+  def delete_record
+    # raise params.inspect
+    @seat_layouts = SeatLayout.find(params[:seat_id])
+    # raise @seat_layouts.inspect
+    if @seat_layouts.destroy
+
+    end
+    @layouts = Layout.where(level_ids: params[:level_id])[0]
+    # raise @layouts.inspect
+    if @layouts.present?
+      @layout = @layouts.seat_layout_ids.split('|')
+      @layout.delete_if{|i|i==params[:seat_id].to_s}
+      @layout = @layout.join('|')
+      @layouts.update_attribute(:seat_layout_ids, @layout.to_s)
+    end
+    flash[:notice] = "Successfully deleted"
+    render :js => 'window.location.reload()'
+  end
+
   def destroy
     @level.destroy
     respond_to do |format|
