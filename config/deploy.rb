@@ -11,13 +11,13 @@ SSHKit.config.command_map[:rake] = "bundle exec rake"
   set :scm, :git
 # Default deploy_to directory is /var/www/my_app_name
   set :deploy_to, '/var/www/atlasmonkey.com'
-  set :branch, 'master'
+  set :branch, "ibeacon"
   set :rvm_ruby_version, '2.2.0'
   set :rvm_type, :system
   set :rvm_custom_path, '/home/ubuntu/.rvm'
   server '52.5.49.148', user: 'ubuntu', roles: %w{web app db}
 
-  set :pty, false
+  set :pty, true
 # Default value for :scm is :git
 
 # Default value for :format is :pretty

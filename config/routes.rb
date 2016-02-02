@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       get '/get_ticket_detail' => 'tickets#get_ticket_detail'
       get '/get_seat_detail' => 'seats#get_seat_detail'
       get '/get_all_seat_details' => 'seats#get_all_seat_details'
+      get 'layout/get_layout' => 'layout#get_layout'
       resources :venues, only: [:index] do
         resources :levels, only: [:index, :show] do
           resources :blocks, only: [:index] do

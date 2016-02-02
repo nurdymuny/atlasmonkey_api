@@ -39,6 +39,7 @@ group :development, :test do
   gem 'byebug'
   gem 'capistrano',  '~> 3.1'
   gem 'capistrano-rails', '~> 1.1'
+  gem 'capistrano-ssh-doctor', '~> 1.0'
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
 

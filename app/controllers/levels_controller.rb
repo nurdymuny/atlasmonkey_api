@@ -63,6 +63,7 @@ class LevelsController < ApplicationController
     @venue = Venue.all.where(id: params[:venue_id])[0]
     @layout = Layout.select("id, grid_size").where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])
     @seat_layout = SeatLayout.where(venue_id: params[:venue_id]).where(level_id: params[:level_id])
+    # @block = Block.select("blocks.id, blocks.name, seat_layouts.seat_number, seat_layouts.block_id").joins("INNER JOIN seat_layouts ON blocks.id = seat_layouts.block_id").where("seat_layouts.seat_number = '#{@seat_layout.seat_number}'")
     # raise @seat_layout.inspect
 
   end
@@ -99,8 +100,8 @@ class LevelsController < ApplicationController
         index = 0
         while (index < @count)
             puts index
-            @block = Block.where(level_id: params[:level_id])[0]
-            @block_id = @block.id
+            @block_id = params[:block_id][index]
+            # @block_id = @block.id
             # raise @block_id.inspect
             @seat_number = params[:seat_number][index]
             @uuid_number = params[:uuid_number][index]

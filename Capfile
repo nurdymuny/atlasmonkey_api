@@ -15,6 +15,7 @@ require 'capistrano/deploy'
 #   https://github.com/capistrano/rails
 #   https://github.com/capistrano/passenger
 #
+  require 'capistrano/ssh_doctor'
   require 'capistrano/rvm'
   require 'capistrano/rails'
   require 'capistrano3/unicorn'
