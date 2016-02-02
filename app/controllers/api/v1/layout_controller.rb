@@ -1,32 +1,42 @@
 module Api
   module V1
     class LayoutController < ApplicationController
-    def get_layouts
+    def seat_layout
       @seat_layouts = SeatLayout.all
-      @seat_layouts.each do |seat_layout|
-          @seat_number = seat_layout.seat_number
-      end
-      @level = Layout.where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])[0]
-      if @level.present?
-          @x_size = @level.grid_size.split('x')[0]
-          @y_size = @level.grid_size.split('x')[1]
-      end
+       @seat = Array.new()
+
+      @levels = Layout.where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])
+      # if @level.present?
+      #     @x_size = @level.grid_size.split('x')[0]
+      #     @y_size = @level.grid_size.split('x')[1]
+      # end
       if @seat_layouts.present?
-          if @level.present?
+          if @levels.present?
+              @seat_layouts.each do |seat_layout|
+                 @levels.each do |level|
+                     @x_size = level.grid_size.split('x')[0]
+                     @y_size = level.grid_size.split('x')[1]
+                     level_detail=Hash.new()
+                     seat_detail = Hash.new()
+                     level_detail[:level_id] = level.level_ids
+                     level_detail[:grid] = {x: @x_size, y: @y_size,}
+                     seat_detail[:seats] = {seat_number: seat_layout.seat_number,
+                                                    block_id: seat_layout.block_id,
+                                                    uuid: seat_layout.uuid_number,
+                                            grid: {x: seat_layout.x_grid_ref,
+                                                   y: seat_layout.y_grid_ref
+
+                         }
+                                            }
+
+                      @seat << seat_detail
+                      @level << level_detail
+                 end
+              end
             render status: 200, json: {
                               success: true,
-                              levels:{
-                                level_id: @level.level_ids,
-                                grid:{
-                                  x:@x_size,
-                                  y:@y_size,
-                              seats: {
-                                  seat_number: @seat_number
-
-
-                              }
-                            }
-                          }
+                              levels: @level,
+                              seat: @seat
                           }
           else
             render status: 404, json: {
@@ -46,24 +56,64 @@ module Api
 
     end
     def get_user_seat_info
-      render status: 200, json: {
-                            success: true,
-                            seats:
-                                {
-                                    seat_id:23,
-                                    block_id:4,
-                                    uuid: '74278BDA-B644-4520-8F0C-720EAF059935',
-                                    row: 'D',
-                                    seat_number:7,
-                                    grid:{
-                                        x:7,
-                                        y:8
-                                    },
+        if params[:user_id] == '1'
+          render status: 200, json: {
+                                success: true,
+                                seats:
+                                    {
+                                        seat_id:23,
+                                        block_id:4,
+                                        uuid: '74278BDA-B644-4520-8F0C-720EAF059935',
+                                        row: 'D',
+                                        seat_number:7,
+                                        grid:{
+                                            x:7,
+                                            y:8
+                                        },
 
-                                    is_path: false
-                                }
+                                        is_path: false
+                                    }
 
-                        }
+                            }
+        elsif params[:user_id] == '2'
+            render status: 200, json: {
+                                  success: true,
+                                  seats:
+                                      {
+                                          seat_id:25,
+                                          block_id:4,
+                                          uuid: '74278BDA-B644-4520-8F0C-720EAF059935',
+                                          row: 'D',
+                                          seat_number:7,
+                                          grid:{
+                                              x:7,
+                                              y:8
+                                          },
+
+                                          is_path: false
+                                      }
+
+                              }
+        elsif params[:user_id] = '3'
+            render status: 200, json: {
+                                  success: true,
+                                  seats:
+                                      {
+                                          seat_id:30,
+                                          block_id:4,
+                                          uuid: '74278BDA-B644-4520-8F0C-720EAF059935',
+                                          row: 'D',
+                                          seat_number:7,
+                                          grid:{
+                                              x:7,
+                                              y:8
+                                          },
+
+                                          is_path: false
+                                      }
+
+                              }
+        end
 
     end
     def get_layout

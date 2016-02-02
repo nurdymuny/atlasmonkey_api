@@ -27,7 +27,7 @@ Rails.application.routes.draw do
       get '/get_ticket_detail' => 'tickets#get_ticket_detail'
       get '/get_seat_detail' => 'seats#get_seat_detail'
       get '/get_all_seat_details' => 'seats#get_all_seat_details'
-      get 'layout/get_layout' => 'layout#get_layout'
+      get 'layout/seat_layout' => 'layout#seat_layout'
       get 'venue/layout/get' => 'layout#get_layout'
       get 'venue/get_user_seat_info' => 'layout#get_user_seat_info'
       resources :venues, only: [:index] do
