@@ -69,7 +69,7 @@ class LevelsController < ApplicationController
   end
 
   def update_layout
-      # raise @x_size = params[:x_grid].inspect
+
       if (params[:type] == '1')
         @x_size = params[:x_grid]
         @y_size = params[:y_grid]
@@ -95,40 +95,30 @@ class LevelsController < ApplicationController
         end
       elsif (params[:type] == '2')
         @count = params[:seat_number].count
+        @block_id = params[:block_id]
         # raise @count
         puts @count
         index = 0
         while (index < @count)
             puts index
-            @block_id = params[:block_id][index]
-            # @block_id = @block.id
-            # raise @block_id.inspect
             @seat_number = params[:seat_number][index]
             @uuid_number = params[:uuid_number][index]
-            # raise @seat_number.inspect
-
             @table_col_val = params[:table_col_val][index]
-            # @table_col_val = @table_col[0]
-            # raise @table_col_val.inspect
             if @table_col_val.to_s.length >= 3
               @y_ref = @table_col_val[-2, 2]
-              # raise @x_ref.inspect
             else
               @y_ref = @table_col_val[-1, 1]
             end
-            # raise @x_ref.inspect
             if @table_col_val.to_s.length > 3
               @x_ref = @table_col_val[0,2]
             else
               @x_ref = @table_col_val[0,1]
             end
 
-            # raise @y_ref.inspect
             @Layout = Layout.where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])[0]
             @SeatLayout = SeatLayout.new
             @SeatLayout[:layout_id] = @Layout.id
             @SeatLayout[:seat_number] = @seat_number
-            # raise @seat_number.inspect
             @SeatLayout[:uuid_number] = @uuid_number
             @SeatLayout[:level_id] = params[:level_id]
             @SeatLayout[:venue_id] = params[:venue_id]
