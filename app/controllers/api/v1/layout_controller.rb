@@ -30,12 +30,12 @@ module Api
                                             }
 
                       @seat << seat_detail
-                      @level << level_detail
+                      # @level << level_detail
                  end
               end
             render status: 200, json: {
                               success: true,
-                              levels: @level,
+                              # levels: @level,
                               seat: @seat
                           }
           else
