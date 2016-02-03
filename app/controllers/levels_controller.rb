@@ -93,7 +93,14 @@ class LevelsController < ApplicationController
             render :edit
           end
         end
-      elsif (params[:type] == '2')
+      elsif params[:type] == '0'
+        # raise params[:seat_layout_id].inspect
+        @seat_number = SeatLayout.where(seat_number: params[:already_table_number])[0]
+        # raise @seat_number.inspect
+
+
+
+      else (params[:type] == '2')
         @count = params[:seat_number].count
         @block_id = params[:block_id]
         # raise @count
@@ -143,11 +150,7 @@ class LevelsController < ApplicationController
         end
         flash[:notice] = "Successfully updated"
         render :js => 'window.location.reload()'
-        else
-          flash[:notice] = "Successfully updated"
-          render :js => 'window.location.reload()'
-        end
-
+      end
   end
 
   def delete_record

@@ -14,8 +14,8 @@
     <span style=""><input type="text" id="rowcount" value="<%= @x_size %>" style="width: 3%;" /></span>
     <span style="">x <input type="text" id="columncount" value="<%= @y_size %>" style="width: 3%;" /></span><br><br>
 <% else %>
-    <span style="">Grid: <input type="text" id="rowcount" value="10" style="width: 3%;" /></span>
-    <span style="">x <input type="text" id="columncount" value="20" style="width: 3%;" /></span><br><br>
+    <span style="">Grid: <input type="text" id="rowcount" value="5" style="width: 3%;" /></span>
+    <span style="">x <input type="text" id="columncount" value="5" style="width: 3%;" /></span><br><br>
 <% end %>
     <%= form_for @level, method: 'POST' do |f| %>
         <div class="field">
@@ -126,7 +126,7 @@
           $(document).ready(function(){
               $("#<%= @x_grid_ref%><%= @y_grid_ref%>").addClass("td_cl_md");
               $("#<%= @x_grid_ref%><%= @y_grid_ref%>").removeClass("td_cl_lg");
-             $("#<%= @x_grid_ref%><%= @y_grid_ref%>").html("<p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='25px' height='25px' style='margin-left:-11%;'  class='del_img' ></span><span class='img_none' onclick='del_item(<%= @seat_layout_id%>);'><img src='/assetsclose.png' style='width:23%; margin-top:-60%; float:right; margin-left:75%; cursor:pointer'></span>");
+             $("#<%= @x_grid_ref%><%= @y_grid_ref%>").html("<p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><span onclick='table_show(<%= @seat_number %>, <%= @seat_layout_id%>);'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='25px' height='25px' style='margin-left:-11%;'  class='del_img' ></span><span class='img_none' onclick='del_item(<%= @seat_layout_id%>);'><img src='/assetsclose.png' style='width:23%; margin-top:-60%; float:right; margin-left:75%; cursor:pointer'></span>");
           });
         </script>
 <% end%>
@@ -251,7 +251,7 @@
     function update_box(){
         var restaurant_id = $("#layout_restaurants_id").val();
         var already_table_number = $("#already_value").val();
-        var already_diner_id = $("#diner_id").val();
+        var already_diner_id = $("#seat_layout_id").val();
 //                localStorage.setItem('already_table_number', already_table_number);
 //                localStorage.setItem('already_diner_id', already_diner_id);
         currentList = localStorage["already_table_number"];
@@ -302,7 +302,8 @@
 </script>
 <script>
   function add_new_table(){
-
+    var already_table_number = JSON.parse(localStorage.getItem('already_table_number'));
+    var already_diner_id = JSON.parse(localStorage.getItem('already_diner_id'));
     var level_id = $("#level_id").val();
     var venue_id = $("#venue_id").val();
     var block_id = $("#block_title").val();
@@ -314,8 +315,13 @@
     var y_grid = $("#columncount").val();
 //      alert(x_grid);
     if(localStorage.getItem('seat_number') == undefined){
-        var type = '1';
-        var data = {level_id:level_id, venue_id: venue_id, type:type, x_grid:x_grid, y_grid: y_grid}
+        if(localStorage.getItem('already_table_number') != undefined) {
+            var type = '0'
+            var data = {id: seat_layout_id, type: type, already_table_number: already_table_number, already_diner_id: already_diner_id}
+        }else {
+            var type = '1';
+            var data = {level_id: level_id, venue_id: venue_id, type: type, x_grid: x_grid, y_grid: y_grid}
+        }
     }else{
         var type = '2';
         var data = {level_id: level_id, venue_id: venue_id, type:type, seat_number:seat_number, table_col_val: table_col_val, uuid_number:uuid_number, block_id: block_id}
@@ -334,6 +340,23 @@
   }
 </script>
 
+<script>
+    function table_show(seat_no, seat_layout_id){
+        $(".del_img").dblclick(function(){
+            $("#already_used").css("display", "block");
+            $("#already_value").val(seat_no);
+            $("#seat_layout_id").val(seat_layout_id);
+            //localStorage.setItem('diner_id', diner_id);
+        });
+    }
+</script>
+<script>
+    function stop_poup(){
+        $("#already_used").css("display", "none");
+        $("#already_value").val('');
+    }
+</script>
+
 <div id="box">
   <div id="auto_fill" style="width: 15%; height: 145px; z-index: 9999; background-color: grey; display: none; position:absolute; margin-top: 10%; margin-left: 10%; border-radius:5px;">
     <form name="fname" method="post">
@@ -344,6 +367,13 @@
     </form>
 
     </div>
+  <div id="already_used" style="width: 15%; height: 110px; z-index: 9999; background-color: grey; display: none; position:absolute; margin-top: 10%; margin-left: 10%; border-radius:5px;">
+    <form name="fnme" method="post">
+      &nbsp;&nbsp;<span style="color: black; font-weight:bold;">Enter Seat No.</span><input type="text" id="already_value" style="margin-left: 5%; margin-top: 5%;" required="required"><span onclick="stop_poup();"><img src="/assetsclose.png" style="width: 7%; position: absolute; top:-1%; right:1%; cursor: pointer;"></span><br>
+      <input type="hidden" id="seat_layout_id">
+      <input type="button" value="Submit" style="margin-left: 33%; margin-top: 8%; background-color: #337ab7; color: white; border: 1px solid black; border-radius: 5px;" onclick="update_box();">
+    </form>
+  </div>
 <p style="margin-left:90%; float:right; margin-right: 0.5%;">Table Panel</p>
 <div style="float: right; width: 10%; height: 260px; margin-left:2%; border: 2px solid gray; border-radius:5px; background-color: white;">
   <p style="border-bottom: 1px solid gray; margin-left:10%;"><img class="draggable" id="two_table" src='/assetsTable2.png' width='25px' height='25px'></p>
