@@ -1,0 +1,49 @@
+current directory: /Users/attmac107/Documents/SandeepWork/atlasmonkey_api/vendor/cache/ruby/2.0.0/gems/mysql2-0.3.19/ext/mysql2
+/Users/attmac107/.rvm/rubies/ruby-2.0.0-p643/bin/ruby -r ./siteconf20160202-2715-1kb2n1i.rb extconf.rb
+checking for ruby/thread.h... yes
+checking for rb_thread_call_without_gvl() in ruby/thread.h... yes
+checking for rb_thread_blocking_region()... yes
+checking for rb_wait_for_single_fd()... yes
+checking for rb_hash_dup()... yes
+checking for rb_intern3()... yes
+-----
+Using mysql_config at /usr/local/bin/mysql_config
+-----
+checking for mysql.h... yes
+checking for errmsg.h... yes
+checking for mysqld_error.h... yes
+-----
+Setting rpath to /usr/local/Cellar/mysql/5.7.10/lib
+-----
+creating Makefile
+
+To see why this extension failed to compile, please check the mkmf.log which can be found here:
+
+  /Users/attmac107/Documents/SandeepWork/atlasmonkey_api/vendor/cache/ruby/2.0.0/extensions/x86_64-darwin-15/2.0.0/mysql2-0.3.19/mkmf.log
+
+current directory: /Users/attmac107/Documents/SandeepWork/atlasmonkey_api/vendor/cache/ruby/2.0.0/gems/mysql2-0.3.19/ext/mysql2
+make "DESTDIR=" clean
+
+current directory: /Users/attmac107/Documents/SandeepWork/atlasmonkey_api/vendor/cache/ruby/2.0.0/gems/mysql2-0.3.19/ext/mysql2
+make "DESTDIR="
+compiling client.c
+client.c:359:33: warning: implicit conversion loses integer precision: 'long' to 'unsigned int' [-Wshorten-64-to-32]
+        elapsed_time = end_time - start_time;
+                     ~ ~~~~~~~~~^~~~~~~~~~~~
+client.c:1157:56: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'unsigned int' [-Wshorten-64-to-32]
+  mysql2rb = mysql2_mysql_enc_name_to_rb(charset_name, charset_name_len);
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~               ^~~~~~~~~~~~~~~~
+2 warnings generated.
+compiling infile.c
+compiling mysql2_ext.c
+compiling result.c
+result.c:189:17: warning: comparison of integers of different signs: 'int' and 'unsigned long' [-Wsign-compare]
+  for (i = 0; i < (len - 1); i++) {
+              ~ ^  ~~~~~~~
+1 warning generated.
+linking shared-object mysql2/mysql2.bundle
+
+current directory: /Users/attmac107/Documents/SandeepWork/atlasmonkey_api/vendor/cache/ruby/2.0.0/gems/mysql2-0.3.19/ext/mysql2
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 mysql2.bundle ./.gem.20160202-2715-1w3fbcx/mysql2
+installing default mysql2 libraries
