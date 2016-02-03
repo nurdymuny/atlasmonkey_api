@@ -95,4 +95,5 @@ Rails.application.routes.draw do
 
   post 'levels/update_layout' => 'levels#update_layout', :as => 'level'
   post 'levels/delete_record' => 'levels#delete_record', :as => 'delete_record'
+  post 'levels/update_user_seat_layout' => 'levels#update_user_seat_layout', :as => 'update_user_seat_layout'
 end

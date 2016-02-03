@@ -1,6 +1,6 @@
 class LevelsController < ApplicationController
-  before_action :find_venue, except: [:manage_layout, :update_layout, :delete_record, :seat_allocate]
-  before_action :find_level, except: [:new, :create, :index, :manage_layout, :update_layout, :delete_record, :seat_allocate]
+  before_action :find_venue, except: [:manage_layout, :update_layout, :delete_record, :seat_allocate, :update_user_seat_layout]
+  before_action :find_level, except: [:new, :create, :index, :manage_layout, :update_layout, :delete_record, :seat_allocate, :update_user_seat_layout]
   skip_before_action :verify_authenticity_token
   load_and_authorize_resource
   
@@ -63,6 +63,25 @@ class LevelsController < ApplicationController
     @venue = Venue.all.where(id: params[:venue_id])[0]
     @layout = Layout.select("id, grid_size").where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])
     @seat_layout = SeatLayout.where(venue_id: params[:venue_id]).where(level_id: params[:level_id])
+
+  end
+
+  def update_user_seat_layout
+      # raise params[:already_table_number].inspect
+    @seat = SeatLayout.where(level_id: params[:level_id]).where(venue_id: params[:venue_id]).where(seat_number: params[:already_table_number])[0]
+    if @seat.present?
+      @User_seat_allocate = UserSeatAllocate.new
+      @User_seat_allocate[:x_grid] = @seat.x_grid_ref
+      @User_seat_allocate[:y_grid] = @seat.y_grid_ref
+      @User_seat_allocate[:seat_id] = params[:already_table_number]
+      @User_seat_allocate[:block_id] = @seat.block_id
+      if @User_seat_allocate.save
+        flash[:notice] = "Successfully created"
+        render :js => 'window.location.reload()'
+      else
+        render :edit
+      end
+    end
 
   end
 
