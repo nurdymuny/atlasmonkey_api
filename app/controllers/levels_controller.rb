@@ -95,7 +95,14 @@ class LevelsController < ApplicationController
         end
       elsif params[:type] == '0'
         # raise params[:seat_layout_id].inspect
-        @seat_number = SeatLayout.where(seat_number: params[:already_table_number])[0]
+        @seat = SeatLayout.where(id: params[:already_diner_id])[0]
+        @seat_number = params[:already_table_number][0]
+        # raise @seat_number.inspect
+        if @seat.present?
+          @seat.update_attribute(:seat_number, @seat_number)
+          flash[:notice] = "Successfully updated"
+          render :js => 'window.location.reload()'
+        end
         # raise @seat_number.inspect
 
 

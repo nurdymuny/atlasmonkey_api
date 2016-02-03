@@ -317,7 +317,7 @@
     if(localStorage.getItem('seat_number') == undefined){
         if(localStorage.getItem('already_table_number') != undefined) {
             var type = '0'
-            var data = {id: seat_layout_id, type: type, already_table_number: already_table_number, already_diner_id: already_diner_id}
+            var data = {type: type, already_table_number: already_table_number, already_diner_id: already_diner_id}
         }else {
             var type = '1';
             var data = {level_id: level_id, venue_id: venue_id, type: type, x_grid: x_grid, y_grid: y_grid}
