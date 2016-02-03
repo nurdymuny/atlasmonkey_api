@@ -23,7 +23,7 @@
 
 
           <%= f.label :Block_name  %>:&nbsp;&nbsp;
-          <%= collection_select(:block, :title, Block.where(level_id: params[:level_id]), :id, :name, {:prompt=>true}, {:class=>'block_name'}) %><br><br>
+          <%= collection_select(:block, :title, Block.where(level_id: params[:level_id]), :id, :name, {:prompt=>true, :required => true}, {:class=>'block_name'}) %><br><br>
           <%= f.hidden_field :id %>
         </div>
 
@@ -126,7 +126,8 @@
           $(document).ready(function(){
               $("#<%= @x_grid_ref%><%= @y_grid_ref%>").addClass("td_cl_md");
               $("#<%= @x_grid_ref%><%= @y_grid_ref%>").removeClass("td_cl_lg");
-             $("#<%= @x_grid_ref%><%= @y_grid_ref%>").html("<p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><span onclick='table_show(<%= @seat_number %>, <%= @seat_layout_id%>);'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='25px' height='25px' style='margin-left:-11%;'  class='del_img' ></span><span class='img_none' onclick='del_item(<%= @seat_layout_id%>);'><img src='/assetsclose.png' style='width:23%; margin-top:-60%; float:right; margin-left:75%; cursor:pointer'></span>");
+             $("#<%= @x_grid_ref%><%= @y_grid_ref%>").html("<p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><span onclick='table_show(<%= @seat_number %>, <%= @seat_layout_id%>, \"<%= @uuid_number%>\");'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='25px' height='25px' style='margin-left:-11%;'  class='del_img' ></span><span class='img_none' onclick='del_item(<%= @seat_layout_id%>);'><img src='/assetsclose.png' style='width:23%; margin-top:-60%; float:right; margin-left:75%; cursor:pointer'></span><span style= 'position: absolute; margin-top: 1.3%;'><%= @seat_number%></span>");
+
           });
         </script>
 <% end%>
@@ -225,6 +226,7 @@
     function boxsubmit(){
         var seat_number = $("#seat_number").val();
         var uuid_number = $("#uuid_number").val();
+//        alert(uuid_number);
 //                localStorage.setItem('table_number', table_number);
         currentList = localStorage["seat_number"];
         currentList - localStorage["uuid_number"];
@@ -237,23 +239,26 @@
         $("#auto_fill").css("display", "none");
 //                console.log(seat_number);
         $("#seat_number").val('');
-        var UUId = new Array();
+        currentList = localStorage["uuid_number"];
+        var UUID = new Array();
         console.log(currentList);
         if(currentList)
-            UUId = JSON.parse(currentList);
-        UUId.push(uuid_number);
-        localStorage['uuid_number']=JSON.stringify(UUId);
-        $("#auto_fill").css("display", "none");
-//                console.log(seat_number);
+            UUID = JSON.parse(currentList);
+        UUID.push(uuid_number);
+        localStorage['uuid_number']=JSON.stringify(UUID);
+        console.log(uuid_number);
         $("#uuid_number").val('');
+
     }
 
     function update_box(){
         var restaurant_id = $("#layout_restaurants_id").val();
         var already_table_number = $("#already_value").val();
         var already_diner_id = $("#seat_layout_id").val();
+        var already_uuid_number = $("#already_uuid_number").val();
+
 //                localStorage.setItem('already_table_number', already_table_number);
-//                localStorage.setItem('already_diner_id', already_diner_id);
+//                localStorage.setItem('already_uuid_number', already_uuid_number);
         currentList = localStorage["already_table_number"];
         var regId = new Array();
         console.log(currentList);
@@ -272,6 +277,16 @@
 
         $("#already_used").css("display", "none");
         $("#already_value").val('');
+
+        currentList = localStorage["already_uuid_number"];
+        var regId = new Array();
+        console.log(currentList);
+        if(currentList)
+            regId = JSON.parse(currentList);
+        regId.push(already_uuid_number);
+        localStorage['already_uuid_number']=JSON.stringify(regId);
+
+        $("#already_uuid_number").val('');
     }
 
 </script>
@@ -304,6 +319,7 @@
   function add_new_table(){
     var already_table_number = JSON.parse(localStorage.getItem('already_table_number'));
     var already_diner_id = JSON.parse(localStorage.getItem('already_diner_id'));
+    var already_uuid_number = JSON.parse(localStorage.getItem('already_uuid_number'));
     var level_id = $("#level_id").val();
     var venue_id = $("#venue_id").val();
     var block_id = $("#block_title").val();
@@ -317,7 +333,7 @@
     if(localStorage.getItem('seat_number') == undefined){
         if(localStorage.getItem('already_table_number') != undefined) {
             var type = '0'
-            var data = {type: type, already_table_number: already_table_number, already_diner_id: already_diner_id}
+            var data = {type: type, already_table_number: already_table_number, already_diner_id: already_diner_id, already_uuid_number: already_uuid_number}
         }else {
             var type = '1';
             var data = {level_id: level_id, venue_id: venue_id, type: type, x_grid: x_grid, y_grid: y_grid}
@@ -341,10 +357,11 @@
 </script>
 
 <script>
-    function table_show(seat_no, seat_layout_id){
+    function table_show(seat_no, seat_layout_id, uuid_number){
         $(".del_img").dblclick(function(){
             $("#already_used").css("display", "block");
             $("#already_value").val(seat_no);
+            $("#already_uuid_number").val(uuid_number);
             $("#seat_layout_id").val(seat_layout_id);
             //localStorage.setItem('diner_id', diner_id);
         });
@@ -358,7 +375,7 @@
 </script>
 
 <div id="box">
-  <div id="auto_fill" style="width: 15%; height: 145px; z-index: 9999; background-color: grey; display: none; position:absolute; margin-top: 10%; margin-left: 10%; border-radius:5px;">
+  <div id="auto_fill" style="width: 18%; height: 145px; z-index: 9999; background-color: grey; display: none; position:absolute; margin-top: 10%; margin-left: 10%; border-radius:5px;">
     <form name="fname" method="post">
       &nbsp;&nbsp;<span style="color: black; font-weight:bold;">Enter Seat No.</span><input type="text" id="seat_number" style="margin-left: 5%; margin-top: 5%;" required="required">
       &nbsp;&nbsp;<span style="color: black; font-weight:bold;">Enter UID: </span><input type="text" id="uuid_number" required ="required" style="margin-left: 5%; margin-top: 5%;">
@@ -367,9 +384,10 @@
     </form>
 
     </div>
-  <div id="already_used" style="width: 15%; height: 110px; z-index: 9999; background-color: grey; display: none; position:absolute; margin-top: 10%; margin-left: 10%; border-radius:5px;">
+  <div id="already_used" style="width: 20%; height: 150px; z-index: 9999; background-color: grey; display: none; position:absolute; margin-top: 10%; margin-left: 10%; border-radius:5px;">
     <form name="fnme" method="post">
       &nbsp;&nbsp;<span style="color: black; font-weight:bold;">Enter Seat No.</span><input type="text" id="already_value" style="margin-left: 5%; margin-top: 5%;" required="required"><span onclick="stop_poup();"><img src="/assetsclose.png" style="width: 7%; position: absolute; top:-1%; right:1%; cursor: pointer;"></span><br>
+      &nbsp;&nbsp;<span style="color: black; font-weight:bold;">Enter UID: </span><input type="text" id="already_uuid_number" required ="required" style="margin-left: 5%; margin-top: 5%;">
       <input type="hidden" id="seat_layout_id">
       <input type="button" value="Submit" style="margin-left: 33%; margin-top: 8%; background-color: #337ab7; color: white; border: 1px solid black; border-radius: 5px;" onclick="update_box();">
     </form>

@@ -1,6 +1,6 @@
 class LevelsController < ApplicationController
-  before_action :find_venue, except: [:manage_layout, :update_layout, :delete_record]
-  before_action :find_level, except: [:new, :create, :index, :manage_layout, :update_layout, :delete_record]
+  before_action :find_venue, except: [:manage_layout, :update_layout, :delete_record, :seat_allocate]
+  before_action :find_level, except: [:new, :create, :index, :manage_layout, :update_layout, :delete_record, :seat_allocate]
   skip_before_action :verify_authenticity_token
   load_and_authorize_resource
   
@@ -57,8 +57,18 @@ class LevelsController < ApplicationController
     end
   end
 
+  def seat_allocate
+    @level = Level.where(venue_id: params[:venue_id]).where(id: params[:level_id])[0]
+
+    @venue = Venue.all.where(id: params[:venue_id])[0]
+    @layout = Layout.select("id, grid_size").where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])
+    @seat_layout = SeatLayout.where(venue_id: params[:venue_id]).where(level_id: params[:level_id])
+
+  end
+
   def manage_layout
     @level = Level.where(venue_id: params[:venue_id]).where(id: params[:level_id])[0]
+    # @block = Block.where(level_id: params[:level_id])
     # raise @level.inspect
     @venue = Venue.all.where(id: params[:venue_id])[0]
     @layout = Layout.select("id, grid_size").where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])
@@ -94,18 +104,15 @@ class LevelsController < ApplicationController
           end
         end
       elsif params[:type] == '0'
-        # raise params[:seat_layout_id].inspect
         @seat = SeatLayout.where(id: params[:already_diner_id])[0]
         @seat_number = params[:already_table_number][0]
-        # raise @seat_number.inspect
+        @uuid_number = params[:already_uuid_number][0]
         if @seat.present?
           @seat.update_attribute(:seat_number, @seat_number)
+          @seat.update_attribute(:uuid_number, @uuid_number)
           flash[:notice] = "Successfully updated"
           render :js => 'window.location.reload()'
         end
-        # raise @seat_number.inspect
-
-
 
       else (params[:type] == '2')
         @count = params[:seat_number].count

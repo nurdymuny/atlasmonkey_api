@@ -90,7 +90,9 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
   get 'venues/levels/manage_layout' => 'levels#manage_layout', :as => 'manage_layout'
+  get 'venues/levels/seat_allocate' => 'levels#seat_allocate', :as => 'seat_allocate'
   # resources :blocks
+
   post 'levels/update_layout' => 'levels#update_layout', :as => 'level'
   post 'levels/delete_record' => 'levels#delete_record', :as => 'delete_record'
 end

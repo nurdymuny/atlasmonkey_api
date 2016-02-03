@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160201051657) do
+ActiveRecord::Schema.define(version: 20160203130444) do
 
   create_table "blocks", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -79,6 +79,17 @@ ActiveRecord::Schema.define(version: 20160201051657) do
     t.integer  "block_id",         limit: 4
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+  end
+
+  create_table "user_seat_allocates", force: :cascade do |t|
+    t.integer  "seat_id",     limit: 4
+    t.integer  "user_id",     limit: 4
+    t.integer  "x_grid",      limit: 4
+    t.integer  "y_grid",      limit: 4
+    t.integer  "block_id",    limit: 4
+    t.string   "uuid_number", limit: 255
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "user_tokens", force: :cascade do |t|

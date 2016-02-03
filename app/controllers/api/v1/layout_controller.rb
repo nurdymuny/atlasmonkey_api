@@ -3,40 +3,52 @@ module Api
     class LayoutController < ApplicationController
     def seat_layout
       @seat_layouts = SeatLayout.all
-       @seat = Array.new()
 
-      @levels = Layout.where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])
-      # if @level.present?
-      #     @x_size = @level.grid_size.split('x')[0]
-      #     @y_size = @level.grid_size.split('x')[1]
-      # end
+      layout = Layout.where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])[0]
       if @seat_layouts.present?
-          if @levels.present?
-              @seat_layouts.each do |seat_layout|
-                 @levels.each do |level|
-                     @x_size = level.grid_size.split('x')[0]
-                     @y_size = level.grid_size.split('x')[1]
-                     level_detail=Hash.new()
-                     seat_detail = Hash.new()
-                     level_detail[:level_id] = level.level_ids
-                     level_detail[:grid] = {x: @x_size, y: @y_size,}
-                     seat_detail[:seats] = {seat_number: seat_layout.seat_number,
-                                                    block_id: seat_layout.block_id,
-                                                    uuid: seat_layout.uuid_number,
-                                            grid: {x: seat_layout.x_grid_ref,
-                                                   y: seat_layout.y_grid_ref
+          if layout.present?
+              seats = []
+              for x in (0...layout.grid_size.split('x')[0].to_i) do
+                  for y in (0...layout.grid_size.split('x')[1].to_i) do
+                      seat_dict = {}
+                     seat = SeatLayout.where(layout_id: layout.id, x_grid_ref: x, y_grid_ref: y)[0]
+                      if seat.present?
+                          seat_dict = {seat_number: seat.seat_number,
+                                  block_id: seat.block_id,
+                                  uuid: seat.uuid_number,
+                                  grid: {
+                                      x: seat.x_grid_ref,
+                                      y: seat.y_grid_ref
+                                  },
+                                is_path: false
+                          }
+                      else
+                          seat_dict = {seat_number: 0,
+                                  block_id: 0,
+                                  uuid: '',
+                                  grid: {
+                                      x: x,
+                                      y: y
+                                  },
+                                  is_path: true
+                          }
+                      end
+                      seats.append(seat_dict)
+                  end
 
-                         }
-                                            }
-
-                      @seat << seat_detail
-                      # @level << level_detail
-                 end
               end
+                      # @level << level_detail
             render status: 200, json: {
                               success: true,
-                              # levels: @level,
-                              seat: @seat
+                              levels: {
+                                  level_id: layout.id,
+                                  grid:{
+                                      x: layout.grid_size.split('x')[0],
+                                      y: layout.grid_size.split('x')[1]
+                                  },
+
+                              seats: seats
+              },
                           }
           else
             render status: 404, json: {
@@ -61,16 +73,15 @@ module Api
                                 success: true,
                                 seats:
                                     {
-                                        seat_id:23,
+                                        seat_id:4,
                                         block_id:4,
-                                        uuid: '74278BDA-B644-4520-8F0C-720EAF059935',
-                                        row: 'D',
-                                        seat_number:7,
+                                        uuid: 'B9407F30-F5F8-466E-AFF9-25556B57FE6D',
+                                        row: 'C',
+                                        seat_number:4,
                                         grid:{
-                                            x:7,
-                                            y:8
+                                            x:1,
+                                            y:12
                                         },
-
                                         is_path: false
                                     }
 
@@ -80,16 +91,15 @@ module Api
                                   success: true,
                                   seats:
                                       {
-                                          seat_id:25,
+                                          seat_id:11,
                                           block_id:4,
-                                          uuid: '74278BDA-B644-4520-8F0C-720EAF059935',
-                                          row: 'D',
-                                          seat_number:7,
+                                          uuid: '999557E7-23E4-4BED-988A-A02FE47F9001',
+                                          row: 'A',
+                                          seat_number:11,
                                           grid:{
                                               x:7,
-                                              y:8
+                                              y:4
                                           },
-
                                           is_path: false
                                       }
 
@@ -99,18 +109,19 @@ module Api
                                   success: true,
                                   seats:
                                       {
-                                          seat_id:30,
+                                          seat_id:18,
                                           block_id:4,
                                           uuid: '74278BDA-B644-4520-8F0C-720EAF059935',
                                           row: 'D',
-                                          seat_number:7,
+                                          seat_number:18,
                                           grid:{
-                                              x:7,
-                                              y:8
+                                              x:1,
+                                              y:3
                                           },
 
                                           is_path: false
                                       }
+
 
                               }
         end
