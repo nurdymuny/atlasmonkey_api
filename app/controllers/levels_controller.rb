@@ -166,6 +166,14 @@ class LevelsController < ApplicationController
               @x_ref = @table_col_val[0]
               @y_ref = @table_col_val[1]
             end
+            if @table_col_val.to_s.length >= 4
+              @y_ref = @table_col_val[-2, 2]
+              # raise @y_ref.inspect
+              @x_ref = @table_col_val[0,2]
+              # raise @x_ref.inspect
+
+            end
+
 
             @Layout = Layout.where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])[0]
             @SeatLayout = SeatLayout.new
