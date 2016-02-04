@@ -26,7 +26,7 @@ SSHKit.config.command_map[:rake] = "bundle exec rake"
   set :ssh_options, {
   forward_agent: true,
   auth_methods: ["publickey"],
-  keys: %w(atlas_monkey.pem)
+  keys: %w(~/.ssh/id_rsa)
 }
 # Default value for :log_level is :debug
 #set :log_level, :debug

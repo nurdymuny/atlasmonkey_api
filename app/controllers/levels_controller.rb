@@ -73,10 +73,12 @@ class LevelsController < ApplicationController
       @User_seat_allocate = UserSeatAllocate.new
       @User_seat_allocate[:x_grid] = @seat.x_grid_ref
       @User_seat_allocate[:y_grid] = @seat.y_grid_ref
-      @User_seat_allocate[:seat_id] = params[:already_table_number]
+      @User_seat_allocate[:seat_id] = params[:already_table_number][0]
+      # raise params[:already_table_number].inspect
       @User_seat_allocate[:block_id] = @seat.block_id
       @User_seat_allocate[:uuid_number] = @seat.uuid_number
-      @User_seat_allocate[:user_id] = params[:user_id]
+      @User_seat_allocate[:user_id] = params[:user_id][0]
+      # raise params[:user_id].inspect
       if @User_seat_allocate.save
         flash[:notice] = "Successfully created"
         render :js => 'window.location.reload()'
