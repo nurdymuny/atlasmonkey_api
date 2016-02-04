@@ -158,8 +158,8 @@ class LevelsController < ApplicationController
             @uuid_number = params[:uuid_number][index]
             @table_col_val = params[:table_col_val][index]
             if @table_col_val.to_s.length >= 3
-              @y_ref = @table_col_val[-2, 2]
-              @x_ref = @table_col_val[0,1]
+              @y_ref = @table_col_val[-1, 1]
+              @x_ref = @table_col_val[0,2]
               # raise @x_ref.inspect
 
             else
