@@ -36,8 +36,8 @@ gem "devise"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
-  gem 'capistrano',  '~> 3.1'
+  gem 'pry-byebug', platform: [:ruby_20]
+  gem 'capistrano',  '~> 3.4'
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-ssh-doctor', '~> 1.0'
   # Access an IRB console on exception pages or by using <%= console %> in views

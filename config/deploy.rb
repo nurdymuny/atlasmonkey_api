@@ -12,6 +12,7 @@ SSHKit.config.command_map[:rake] = "bundle exec rake"
 # Default deploy_to directory is /var/www/my_app_name
   set :deploy_to, '/var/www/atlasmonkey.com'
   set :branch, "ibeacon"
+  set :env, fetch(:env, "production")
   set :rvm_ruby_version, '2.2.0'
   set :rvm_type, :system
   set :rvm_custom_path, '/home/ubuntu/.rvm'
