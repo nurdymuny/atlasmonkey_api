@@ -68,7 +68,13 @@ class LevelsController < ApplicationController
 
   def update_user_seat_layout
       # raise params[:already_table_number].inspect
+    @user = UserSeatAllocate.where(user_id: params[:user_id])[0]
+    # raise @user.inspect
+    if @user.present?
+      @user.destroy
+    end
     @seat = SeatLayout.where(level_id: params[:level_id]).where(venue_id: params[:venue_id]).where(seat_number: params[:already_table_number])[0]
+    # raise @seat.inspect
     if @seat.present?
       @User_seat_allocate = UserSeatAllocate.new
       @User_seat_allocate[:x_grid] = @seat.x_grid_ref
@@ -145,6 +151,7 @@ class LevelsController < ApplicationController
         # raise @count
         puts @count
         index = 0
+      @errors = Array.new
         while (index < @count)
             puts index
             @seat_number = params[:seat_number][index]

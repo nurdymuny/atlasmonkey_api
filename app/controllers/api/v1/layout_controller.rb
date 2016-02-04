@@ -68,32 +68,33 @@ module Api
 
     end
     def get_user_seat_info
-        @user_seat_allocate = UserSeatAllocate.where(user_id: params[:user_id])[0]
-        if @user_seat_allocate.present?
-            render status: 200, json: {
-                                  success: true,
-                                  seats:{
-                                      seat_id: @user_seat_allocate.seat_id,
-                                      block_id: @user_seat_allocate.block_id,
-                                      uuid: @user_seat_allocate.uuid_number,
-                                      venue_id: @user_seat_allocate.venue_id,
-                                      level_id: @user_seat_allocate.level_id,
-                                      grid:{
-                                          x: @user_seat_allocate.x_grid,
-                                          y: @user_seat_allocate.y_grid
-                                      },
-                                      is_path: false
-                                  }
+      @user_seat_allocate = UserSeatAllocate.where(user_id: params[:user_id]).order('created_at desc')[0]
+      if @user_seat_allocate.present?
+        render status: 200, json: {
+                              success: true,
+                              seats: {
+                                  seat_id: @user_seat_allocate.seat_id,
+                                  block_id: @user_seat_allocate.block_id,
+                                  uuid: @user_seat_allocate.uuid_number,
+                                  venue_id: @user_seat_allocate.venue_id,
+                                  level_id: @user_seat_allocate.level_id,
+                                  grid: {
+                                      x: @user_seat_allocate.x_grid,
+                                      y: @user_seat_allocate.y_grid
+                                  },
+                                  is_path: false
                               }
-        else
-            render status: 404, json: {
-                                  success: false,
-                                  events: [],
-                                  message: 'No seat found'
-                              }
-        end
+                          }
+      else
+        render status: 404, json: {
+                              success: false,
+                              events: [],
+                              message: 'No seat found'
+                          }
+      end
 
     end
+
 
     end
   end
