@@ -76,6 +76,8 @@ module Api
                                       seat_id: @user_seat_allocate.seat_id,
                                       block_id: @user_seat_allocate.block_id,
                                       uuid: @user_seat_allocate.uuid_number,
+                                      venue_id: @user_seat_allocate.venue_id,
+                                      level_id: @user_seat_allocate.level_id,
                                       grid:{
                                           x: @user_seat_allocate.x_grid,
                                           y: @user_seat_allocate.y_grid

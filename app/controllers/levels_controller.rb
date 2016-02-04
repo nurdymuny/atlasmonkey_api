@@ -78,6 +78,8 @@ class LevelsController < ApplicationController
       @User_seat_allocate[:block_id] = @seat.block_id
       @User_seat_allocate[:uuid_number] = @seat.uuid_number
       @User_seat_allocate[:user_id] = params[:user_id][0]
+      @User_seat_allocate[:venue_id] = params[:venue_id]
+      @User_seat_allocate[:level_id] = params[:level_id]
       # raise params[:user_id].inspect
       if @User_seat_allocate.save
         flash[:notice] = "Successfully created"

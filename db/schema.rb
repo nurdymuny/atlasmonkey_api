@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160203130444) do
+ActiveRecord::Schema.define(version: 20160204063604) do
 
   create_table "blocks", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -90,6 +90,8 @@ ActiveRecord::Schema.define(version: 20160203130444) do
     t.string   "uuid_number", limit: 255
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.integer  "venue_id",    limit: 4
+    t.integer  "level_id",    limit: 4
   end
 
   create_table "user_tokens", force: :cascade do |t|
