@@ -69,7 +69,7 @@
   .td_cl_lg {
       margin-top: 45px;
       border: 1px solid;
-      width: auto;
+      width: 1%;
       background-color: white;
       /*width: 5% !important;*/
       height: auto;
@@ -91,9 +91,9 @@
                 var cell = '#'+i.toString()+j.toString();
                 var cell_html = $(cell).html();
                 if(cols > 20 && cell_html == undefined){
-                    $("<td  id='"+i.toString()+j.toString()+"'>").attr({class: ["td_cl_lg"]}).appendTo(row);}
+                    $("<td  id='"+'x'+i.toString()+'y'+j.toString()+"'>").attr({class: ["td_cl_lg"]}).appendTo(row);}
                 else{
-                    $("<td  id='"+i.toString()+j.toString()+"'>").attr({class: ["td_cl_md"]}).appendTo(row);}
+                    $("<td  id='"+'x'+i.toString()+'y'+j.toString()+"'>").attr({class: ["td_cl_md"]}).appendTo(row);}
             }
 
         }
@@ -113,7 +113,7 @@
 
 </script>
 <%
-    # raise @seat_layout.inspect
+
     @seat_layout.each do |layout|
     @seat_layout_id = layout.id
     @x_grid_ref = layout.x_grid_ref
@@ -127,7 +127,7 @@
           $(document).ready(function(){
               $("#<%= @x_grid_ref%><%= @y_grid_ref%>").addClass("td_cl_md");
               $("#<%= @x_grid_ref%><%= @y_grid_ref%>").removeClass("td_cl_lg");
-             $("#<%= @x_grid_ref%><%= @y_grid_ref%>").html("<p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><span onclick='table_show(<%= @seat_number %>, <%= @seat_layout_id%>, \"<%= @uuid_number%>\");'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='15px' height='15px' style='margin-left:-11%;'  class='del_img' ></span><span class='img_none' onclick='del_item(<%= @seat_layout_id%>);'><img src='/assetsclose.png' style='width:23%; margin-top:-38%; float:right; margin-left:75%; cursor:pointer'></span><span style= 'position: absolute; margin-top: 12px; font-size: 11px; margin-left:3px'><%= @seat_number%></span>");
+             $("#<%= 'x'+@x_grid_ref.to_s%><%= 'y'+@y_grid_ref.to_s%>").html("<p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><span onclick='table_show(<%= @seat_number %>, <%= @seat_layout_id%>, \"<%= @uuid_number%>\");'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='15px' height='15px' style='margin-left:-11%;'  class='del_img' ></span><span class='img_none' onclick='del_item(<%= @seat_layout_id%>);'><img src='/assetsclose.png' style='width:23%; margin-top:-38%; float:right; margin-left:75%; cursor:pointer'></span><span style= 'position: absolute; margin-top: 12px; font-size: 11px; margin-left:3px'><%= @seat_number%></span>");
 
           });
         </script>
@@ -162,10 +162,11 @@
 //                        localStorage.setItem('table_col_val', table_col_val);
                 currentList = localStorage["table_col_y"];
                 var regId = [];
-                console.log(currentList);
+//                console.log(currentList);
                 if(currentList)
                     regId = JSON.parse(currentList);
-                regId.push(table_col_y);
+                console.log(table_col_y);
+                regId.push(parseInt(table_col_y.toString().match(/\d+/)));
                 localStorage['table_col_y']=JSON.stringify(regId);
                 $("#auto_fill").css("display", "block");
                 console.log(table_col_y);
@@ -175,7 +176,7 @@
                 console.log(currentList);
                 if(currentList)
                     regId = JSON.parse(currentList);
-                regId.push(table_col_x);
+                regId.push(parseInt(table_col_x.toString().match(/\d+/)));
                 localStorage['table_col_x']=JSON.stringify(regId);
                 $("#auto_fill").css("display", "block");
                 console.log(table_col_x);
@@ -197,10 +198,11 @@
 //                        localStorage.setItem('table_col_val', table_col_val);
                 currentList = localStorage["table_col_y"];
                 var regId = [];
-                console.log(currentList);
+//                console.log(currentList);
                 if(currentList)
                     regId = JSON.parse(currentList);
-                regId.push(table_col_y);
+//                console.log(parseInt(table_col_x.toString().match(/\d+/)));
+                regId.push(parseInt(table_col_y.toString().match(/\d+/)));
                 localStorage['table_col_y']=JSON.stringify(regId);
                 $("#auto_fill").css("display", "block");
                 console.log(table_col_y);
@@ -210,7 +212,7 @@
                 console.log(currentList);
                 if(currentList)
                     regId = JSON.parse(currentList);
-                regId.push(table_col_x);
+                regId.push(parseInt(table_col_x.toString().match(/\d+/)));
                 localStorage['table_col_x']=JSON.stringify(regId);
                 $("#auto_fill").css("display", "block");
                 console.log(table_col_x);
@@ -418,7 +420,7 @@
     </div>
   <div id="already_used" style="width: 20%; height: 150px; z-index: 9999; background-color: grey; display: none; position:absolute; margin-top: 10%; margin-left: 10%; border-radius:5px;">
     <form name="fnme" method="post">
-      &nbsp;&nbsp;<span style="color: black; font-weight:bold;">Enter Seat No.</span><input type="text" id="already_value" style="margin-left: 5%; margin-top: 5%;" required="required"><span onclick="stop_poup();"><img src="/assetsclose.png" style="width: 7%; position: absolute; top:-1%; right:1%; cursor: pointer;"></span><br>
+      &nbsp;&nbsp;<span style="color: black; font-weight:bold;">Enter Seat No.</span><input type="text" id="already_value" style="margin-left: 5%; margin-top: 5%;" required><span onclick="stop_poup();"><img src="/assetsclose.png" style="width: 7%; position: absolute; top:-1%; right:1%; cursor: pointer;"></span><br>
       &nbsp;&nbsp;<span style="color: black; font-weight:bold;">Enter UID: </span><input type="text" id="already_uuid_number" required ="required" style="margin-left: 5%; margin-top: 5%;">
       <input type="hidden" id="seat_layout_id">
       <input type="button" value="Submit" style="margin-left: 33%; margin-top: 8%; background-color: #337ab7; color: white; border: 1px solid black; border-radius: 5px;" onclick="update_box();">
