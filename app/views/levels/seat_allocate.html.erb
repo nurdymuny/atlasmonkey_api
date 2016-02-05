@@ -92,10 +92,10 @@
                 var cell = '#' + i.toString() + j.toString();
                 var cell_html = $(cell).html();
                 if (cols > 20 && cell_html == undefined) {
-                    $("<td  id='" + i.toString() + j.toString() + "'>").attr({class: ["td_cl_lg"]}).appendTo(row);
+                    $("<td  id='"+'x'+i.toString()+'y'+j.toString()+"'>").attr({class: ["td_cl_lg"]}).appendTo(row);
                 }
                 else {
-                    $("<td  id='" + i.toString() + j.toString() + "'>").attr({class: ["td_cl_md"]}).appendTo(row);
+                    $("<td  id='"+'x'+i.toString()+'y'+j.toString()+"'>").attr({class: ["td_cl_md"]}).appendTo(row);
                 }
             }
 
@@ -130,7 +130,7 @@
         $(document).ready(function () {
             $("#<%= @x_grid_ref%><%= @y_grid_ref%>").addClass("td_cl_md");
             $("#<%= @x_grid_ref%><%= @y_grid_ref%>").removeClass("td_cl_lg");
-            $("#<%= @x_grid_ref%><%= @y_grid_ref%>").html("<p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><span onclick='table_show(<%= @seat_number %>, <%= @seat_layout_id%>, \"<%= @uuid_number%>\");'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='15px' height='15px' style='margin-left:-11%;'  class='del_img' ></span><span style= 'position: absolute; margin-top: 12px; font-size: 11px; margin-left:3px;'><%= @seat_number%></span>");
+            $("#<%= 'x'+@x_grid_ref.to_s%><%= 'y'+@y_grid_ref.to_s%>").html("<p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><span onclick='table_show(<%= @seat_number %>, <%= @seat_layout_id%>, \"<%= @uuid_number%>\");'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='15px' height='15px' style='margin-left:-11%;'  class='del_img' ></span><span style= 'position: absolute; margin-top: 12px; font-size: 11px; margin-left:3px;'><%= @seat_number%></span>");
 
         });
     </script>
