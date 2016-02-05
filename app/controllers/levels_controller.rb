@@ -164,24 +164,9 @@ class LevelsController < ApplicationController
             puts index
             @seat_number = params[:seat_number][index]
             @uuid_number = params[:uuid_number][index]
-            @table_col_val = params[:table_col_val][index]
-            if @table_col_val.to_s.length >= 3
-              @y_ref = @table_col_val[-1, 1]
-              @x_ref = @table_col_val[0,2]
-              # raise @x_ref.inspect
+            @table_col_x = params[:table_col_x][index]
+            @table_col_y = params[:table_col_y][index]
 
-            else
-              @x_ref = @table_col_val[0]
-              # raise @x_ref.inspect
-              @y_ref = @table_col_val[1]
-            end
-            if @table_col_val.to_s.length >= 4
-              @y_ref = @table_col_val[-2, 2]
-              # raise @y_ref.inspect
-              @x_ref = @table_col_val[0,2]
-              # raise @x_ref.inspect
-
-            end
 
 
             @Layout = Layout.where(venue_id: params[:venue_id]).where(level_ids: params[:level_id])[0]
@@ -192,8 +177,8 @@ class LevelsController < ApplicationController
             @SeatLayout[:level_id] = params[:level_id]
             @SeatLayout[:venue_id] = params[:venue_id]
             @SeatLayout[:block_id] = @block_id
-            @SeatLayout[:x_grid_ref] = @x_ref
-            @SeatLayout[:y_grid_ref] = @y_ref
+            @SeatLayout[:x_grid_ref] = @table_col_x
+            @SeatLayout[:y_grid_ref] = @table_col_y
             if @SeatLayout.save
               if @Layout.seat_layout_ids != nil
                 if not @Layout.seat_layout_ids.empty?

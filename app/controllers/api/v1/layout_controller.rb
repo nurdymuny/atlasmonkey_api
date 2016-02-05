@@ -69,6 +69,7 @@ module Api
     end
     def get_user_seat_info
       @user_seat_allocate = UserSeatAllocate.where(user_id: params[:user_id]).order('created_at desc')[0]
+      @venue_name = Venue.find_by_id(@user_seat_allocate.venue_id)
       if @user_seat_allocate.present?
         render status: 200, json: {
                               success: true,
@@ -77,6 +78,7 @@ module Api
                                   block_id: @user_seat_allocate.block_id,
                                   uuid: @user_seat_allocate.uuid_number,
                                   venue_id: @user_seat_allocate.venue_id,
+                                  venue_name: @venue_name.name,
                                   level_id: @user_seat_allocate.level_id,
                                   grid: {
                                       x: @user_seat_allocate.x_grid,
