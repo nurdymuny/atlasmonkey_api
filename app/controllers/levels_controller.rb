@@ -67,33 +67,41 @@ class LevelsController < ApplicationController
   end
 
   def update_user_seat_layout
-      # raise params[:already_table_number].inspect
-    @user = UserSeatAllocate.where(user_id: params[:user_id])[0]
-    # raise @user.inspect
-    if @user.present?
-      @user.destroy
+    @count = params[:already_table_number].length
+    @user = UserSeatAllocate.where(user_id: params[:user_id])
+    @user.each do |usr|
+      usr.destroy
     end
-    @seat = SeatLayout.where(level_id: params[:level_id]).where(venue_id: params[:venue_id]).where(seat_number: params[:already_table_number])[0]
-    # raise @seat.inspect
-    if @seat.present?
-      @User_seat_allocate = UserSeatAllocate.new
-      @User_seat_allocate[:x_grid] = @seat.x_grid_ref
-      @User_seat_allocate[:y_grid] = @seat.y_grid_ref
-      @User_seat_allocate[:seat_id] = params[:already_table_number][0]
-      # raise params[:already_table_number].inspect
-      @User_seat_allocate[:block_id] = @seat.block_id
-      @User_seat_allocate[:uuid_number] = @seat.uuid_number
-      @User_seat_allocate[:user_id] = params[:user_id][0]
-      @User_seat_allocate[:venue_id] = params[:venue_id]
-      @User_seat_allocate[:level_id] = params[:level_id]
-      # raise params[:user_id].inspect
-      if @User_seat_allocate.save
-        flash[:notice] = "Successfully created"
-        render :js => 'window.location.reload()'
-      else
-        render :edit
+    @seat_no = UserSeatAllocate.where(seat_id: params[:already_table_number])
+    @seat_no.each do |seat|
+      seat.destroy
+    end
+    # raise @count.inspect
+    index = 0
+    while(index < @count)
+      @seat = SeatLayout.where(level_id: params[:level_id]).where(venue_id: params[:venue_id]).where(seat_number: params[:already_table_number])[index]
+      if @seat.present?
+        @User_seat_allocate = UserSeatAllocate.new
+        @User_seat_allocate[:x_grid] = @seat.x_grid_ref
+        @User_seat_allocate[:y_grid] = @seat.y_grid_ref
+        @User_seat_allocate[:seat_id] = params[:already_table_number][index]
+        @User_seat_allocate[:block_id] = @seat.block_id
+        @User_seat_allocate[:uuid_number] = @seat.uuid_number
+        @User_seat_allocate[:user_id] = params[:user_id][index]
+        @User_seat_allocate[:venue_id] = params[:venue_id]
+        @User_seat_allocate[:level_id] = params[:level_id]
+
+        if @User_seat_allocate.save
+
+        else
+          render :edit
+        end
+        index = index + 1;
       end
+      # end
     end
+    flash[:notice] = "Successfully seat assigned"
+    render :js => 'window.location.reload()'
 
   end
 
