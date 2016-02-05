@@ -67,43 +67,48 @@ class LevelsController < ApplicationController
   end
 
   def update_user_seat_layout
-
-    @count = params[:already_table_number].length
-    @user = UserSeatAllocate.where(user_id: params[:user_id])
-    @user.each do |usr|
-      usr.destroy
-    end
-    @seat_no = UserSeatAllocate.where(seat_id: params[:already_table_number])
-    @seat_no.each do |seat|
-      seat.destroy
-    end
-    # raise @count.inspect
-    index = 0
-    while(index < @count)
-      @seat = SeatLayout.where(level_id: params[:level_id]).where(venue_id: params[:venue_id]).where(seat_number: params[:already_table_number])[index]
-      if @seat.present?
-
-        @User_seat_allocate = UserSeatAllocate.new
-        @User_seat_allocate[:x_grid] = @seat.x_grid_ref
-        @User_seat_allocate[:y_grid] = @seat.y_grid_ref
-        @User_seat_allocate[:seat_id] = params[:already_table_number][index]
-        @User_seat_allocate[:block_id] = @seat.block_id
-        @User_seat_allocate[:uuid_number] = @seat.uuid_number
-        @User_seat_allocate[:user_id] = params[:user_id][index]
-        @User_seat_allocate[:venue_id] = params[:venue_id]
-        @User_seat_allocate[:level_id] = params[:level_id]
-
-        if @User_seat_allocate.save
-
-        else
-          render :edit
-        end
-        index = index + 1;
+    @seat = SeatLayout.where(level_id: params[:level_id]).where(venue_id: params[:venue_id]).where(seat_number: params[:already_table_number])[0]
+    # raise @seat.uuid_number.inspect
+    if @seat.uuid_number.empty?
+      flash[:notice] = "UUID not assigned to selected seat."
+      render :js => 'window.location.reload()'
+    else
+      @count = params[:already_table_number].length
+      @user = UserSeatAllocate.where(user_id: params[:user_id])
+      @user.each do |usr|
+        usr.destroy
       end
-      # end
+      @seat_no = UserSeatAllocate.where(seat_id: params[:already_table_number])
+      @seat_no.each do |seat|
+        seat.destroy
+      end
+      # raise @count.inspect
+      index = 0
+      while(index < @count)
+        @seat = SeatLayout.where(level_id: params[:level_id]).where(venue_id: params[:venue_id]).where(seat_number: params[:already_table_number])[index]
+        if @seat.present?
+          @User_seat_allocate = UserSeatAllocate.new
+          @User_seat_allocate[:x_grid] = @seat.x_grid_ref
+          @User_seat_allocate[:y_grid] = @seat.y_grid_ref
+          @User_seat_allocate[:seat_id] = params[:already_table_number][index]
+          @User_seat_allocate[:block_id] = @seat.block_id
+          @User_seat_allocate[:uuid_number] = @seat.uuid_number
+          @User_seat_allocate[:user_id] = params[:user_id][index]
+          @User_seat_allocate[:venue_id] = params[:venue_id]
+          @User_seat_allocate[:level_id] = params[:level_id]
+
+          if @User_seat_allocate.save
+
+          else
+            render :edit
+          end
+          index = index + 1;
+        end
+        # end
+      end
+      flash[:notice] = "Successfully seat assigned"
+      render :js => 'window.location.reload()'
     end
-    flash[:notice] = "Successfully seat assigned"
-    render :js => 'window.location.reload()'
 
   end
 
