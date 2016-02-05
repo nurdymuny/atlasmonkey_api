@@ -70,7 +70,7 @@ class LevelsController < ApplicationController
     @seat = SeatLayout.where(level_id: params[:level_id]).where(venue_id: params[:venue_id]).where(seat_number: params[:already_table_number])[0]
     # raise @seat.uuid_number.inspect
     if @seat.uuid_number.empty?
-      flash[:notice] = "UUID not assigned to selected seat."
+      flash[:notice] = "You need to assign a user to the seat having a valid UUID"
       render :js => 'window.location.reload()'
     else
       @count = params[:already_table_number].length
