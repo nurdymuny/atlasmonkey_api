@@ -51,8 +51,8 @@
     }
 
     .create_table {
-        width: 85%;
-        height: 400px;
+        width: 91%;
+        height: 700px;
         border: 1px solid black;
         margin-left: -4%;
         margin-top: 4%;
@@ -116,6 +116,18 @@
 
 </script>
 <%
+   @block_ids = @seat_layout.map(&:block_id).uniq
+   index = 0
+   color_block_id=Array.new()
+   color = ['red','green','orange','blue','purple','grey','yellow']
+   while index < @block_ids.length
+     a=Hash.new()
+     puts index
+     puts @block_ids[index]
+     a={'id'=> @block_ids[index], 'color'=> color[index]}
+     color_block_id << a
+     index += 1
+   end
    # raise @seat_layout.inspect
    @seat_layout.each do |layout|
      @seat_layout_id = layout.id
@@ -124,17 +136,23 @@
      @seat_number = layout.seat_number
      @uuid_number = layout.uuid_number
      @block_id = layout.block_id
-
+     @selected_block_color=color_block_id.find { |h| h['id'] == @block_id }['color']
+     @blocks = Block.where(id: @block_id)
+     # raise @blocks.inspect
+     @blocks.each do |block|
+       @block_name = block.name
 %>
     <script>
         $(document).ready(function () {
             $("#<%= @x_grid_ref%><%= @y_grid_ref%>").addClass("td_cl_md");
             $("#<%= @x_grid_ref%><%= @y_grid_ref%>").removeClass("td_cl_lg");
-            $("#<%= 'x'+@x_grid_ref.to_s%><%= 'y'+@y_grid_ref.to_s%>").html("<p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><span onclick='table_show(<%= @seat_number %>, <%= @seat_layout_id%>, \"<%= @uuid_number%>\");'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='15px' height='15px' style='margin-left:-11%;'  class='del_img' ></span><span style= 'position: absolute; margin-top: 12px; font-size: 11px; margin-left:3px;'><%= @seat_number%></span>");
+            $("#<%= 'x'+@x_grid_ref.to_s%><%= 'y'+@y_grid_ref.to_s%>").html("<div style='height:100%; color:white; background-color:<%= @selected_block_color%>' ><span style='font-size:11px; font-weight:bold; position:relative; float:left;'><%= @block_name%></span><p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><span onclick='table_show(<%= @seat_number %>, <%= @seat_layout_id%>, \"<%= @uuid_number%>\");'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='15px' height='15px' style='margin-top: -7px;'  class='del_img' ></span><span class='seat_number' style= 'position: absolute; margin-top: 14px; font-size: 11px; margin-left:1px; color:white;'><%= @seat_number%></span><span><%- if @uuid_number.present?%><img src='/assetsbeacon.png' width='20px' height='20px' style='float:left; position:absolute; margin-top:15px; margin-left:-30px;'/></span><% end%></div>");
+            $("#<%= @x_grid_ref%><%= @y_grid_ref%>").css('background-color', '#C3C3C3');
 
         });
     </script>
 <% end %>
+<% end%>
 <script>
 
     $(document).ready(function () {

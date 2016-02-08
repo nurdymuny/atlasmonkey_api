@@ -35,7 +35,16 @@
 <%= form_for @venue do |f| %>
     <%= f.hidden_field :id%>
  <% end%>
-<%= button_tag :Update, class: 'update_btn', onclick: 'add_new_table();'%>
+<%= button_tag :Update, class: 'update_btn', onclick: 'add_new_table();'%><br><br>
+<div>
+  <p style="color: #337ab7"><b><i><u>HOW TO CREATE LAYOUT</u></i></b></p>
+  <ul style="list-style-type: none; padding:0px;">
+    <li style="border: none;">1. Drag a seat from seat panels on right and drop it onto a desired grid cell.</li>
+    <li style="border: none;">2. Give seat a number and UUID number then press "Add" button.</li>
+    <li style="border: none;">3. Repeat steps 1 & 2 to add more seats.</li>
+    <li style="border: none;">4. Once done, simply click the "Update" button above layout to save the changes.</li>
+  </ul>
+</div>
 <style>
   .update_btn{
       margin-left: 10%;
@@ -52,8 +61,8 @@
         border: 1px solid black;
     }
     .create_table {
-        width: 85%;
-        height: 400px;
+        width: 91%;
+        height: 700px;
         border: 1px solid black;
         margin-left: -4%;
         margin-top: 4%;
@@ -72,7 +81,7 @@
       width: 1%;
       background-color: white;
       /*width: 5% !important;*/
-      height: auto;
+      height: 10px;
 
   }
 </style>
@@ -113,7 +122,19 @@
 
 </script>
 <%
-
+    @block_ids = @seat_layout.map(&:block_id).uniq
+    index = 0
+    color_block_id=Array.new()
+    color = ['red','green','orange','blue','purple','grey','yellow']
+    while index < @block_ids.length
+      a=Hash.new()
+      puts index
+      puts @block_ids[index]
+      a={'id'=> @block_ids[index], 'color'=> color[index]}
+      color_block_id << a
+      index += 1
+    end
+    # raise block_id.inspect
     @seat_layout.each do |layout|
     @seat_layout_id = layout.id
     @x_grid_ref = layout.x_grid_ref
@@ -121,16 +142,27 @@
     @seat_number = layout.seat_number
     @uuid_number = layout.uuid_number
     @block_id = layout.block_id
+    @selected_block_color=color_block_id.find { |h| h['id'] == @block_id }['color']
+
+    @blocks = Block.where(id: @block_id)
+    # raise @blocks.inspect
+    @blocks.each do |block|
+      @block_name = block.name
 
 %>
         <script>
           $(document).ready(function(){
+
               $("#<%= @x_grid_ref%><%= @y_grid_ref%>").addClass("td_cl_md");
               $("#<%= @x_grid_ref%><%= @y_grid_ref%>").removeClass("td_cl_lg");
-             $("#<%= 'x'+@x_grid_ref.to_s%><%= 'y'+@y_grid_ref.to_s%>").html("<p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><span onclick='table_show(<%= @seat_number %>, <%= @seat_layout_id%>, \"<%= @uuid_number%>\");'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='15px' height='15px' style='margin-left:-11%;'  class='del_img' ></span><span class='img_none' onclick='del_item(<%= @seat_layout_id%>);'><img src='/assetsclose.png' style='width:23%; margin-top:-38%; float:right; margin-left:75%; cursor:pointer'></span><span style= 'position: absolute; margin-top: 12px; font-size: 11px; margin-left:3px'><%= @seat_number%></span>");
 
+//
+             $("#<%= 'x'+@x_grid_ref.to_s%><%= 'y'+@y_grid_ref.to_s%>").html("<div style='height:100%; color:white; background-color:<%= @selected_block_color%>' ><span style='font-size:11px; font-weight:bold; position:relative; float:left;'><%= @block_name%></span><p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><span onclick='table_show(<%= @seat_number %>, <%= @seat_layout_id%>, \"<%= @uuid_number%>\");'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='15px' height='15px' style='margin-top: -7px;'  class='del_img' ></span><span class='img_none' onclick='del_item(<%= @seat_layout_id%>);'><img src='/assetsclose.png' style='width:23%; margin-top:-38%; float:right; margin-left:75%; cursor:pointer;'></span><span class='seat_number' style= 'position: absolute; margin-top: 14px; color:white; font-size: 11px; margin-left:1px'><%= @seat_number%></span><span><%- if @uuid_number.present?%><img src='/assetsbeacon.png' width='20px' height='20px' style='float:left; position:absolute; margin-top:1%; margin-left:-28px;'/></span><% end%></div>");
+//              document.getElementById('<%= @x_grid_ref%><%= @y_grid_ref%>').style.backgroundColor='Red';
+              $("#<%= @x_grid_ref%><%= @y_grid_ref%>").css('background-color', '#C3C3C3');
           });
         </script>
+<% end%>
 <% end%>
 <script>
 
@@ -334,17 +366,24 @@
 </script>
 <script>
     function del_item(id){
-        var level_id = $("#level_id").val();
+        var answer = confirm("Are you sure you want to delete it.?");
+        if (answer){
+            var level_id = $("#level_id").val();
 //        alert(id);
-        var data = {seat_id: id, level_id: level_id};
-        $.ajax({
-            type:'POST',
-            url: '/levels/delete_record',
-            data: data,
-            success: function(response){
-                location.reload();
-            }
-        });
+            var data = {seat_id: id, level_id: level_id};
+            $.ajax({
+                type:'POST',
+                url: '/levels/delete_record',
+                data: data,
+                success: function(response){
+                    location.reload();
+                }
+            });
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
 </script>
@@ -414,7 +453,7 @@
       &nbsp;&nbsp;<span style="color: black; font-weight:bold;">Enter Seat No.</span><input type="text" id="seat_number" style="margin-left: 5%; margin-top: 5%;" required>
       &nbsp;&nbsp;<span style="color: black; font-weight:bold;">Enter UID: </span><input type="text" id="uuid_number" required ="required" style="margin-left: 5%; margin-top: 5%;">
       <span onclick="drag_poup_hide();"><img src="/assetsclose.png" style="width: 7%; position: absolute; top:-1%; right:1%; cursor: pointer;"></span><br>
-      <input type="button" value="Submit" style="margin-left: 33%; margin-top: 8%; background-color: #337ab7; color: white; border: 1px solid black; border-radius: 5px;" onclick="boxsubmit();">
+      <input type="button" value="Add" style="margin-left: 33%; margin-top: 8%; background-color: #337ab7; color: white; border: 1px solid black; border-radius: 5px;" onclick="boxsubmit();">
     </form>
 
     </div>
@@ -429,9 +468,9 @@
   <div style="float:right; margin-top:-9%;">
     <%= link_to "Go Back", 'javascript:history.back()',class: "btn btn-primary" %>
   </div>
-<p style="margin-left:90%; float:right; margin-right: 0.5%;">Table Panel</p>
-<div style="float: right; width: 10%; height: 260px; margin-left:2%; border: 2px solid gray; border-radius:5px; background-color: white;">
-  <p style="border-bottom: 1px solid gray; margin-left:10%;"><img class="draggable" id="two_table" src='/assetsTable2.png' width='25px' height='25px'></p>
+<p style="margin-left:90%; float:right; margin-right: 0.5%;">Seat Panel</p>
+<div style="float: right; width: 5%; height: 260px; margin-left:2%; border: 2px solid gray; border-radius:5px; background-color: white;">
+  <p style="border-bottom: 1px solid gray; margin-left:10%;"><img class="draggable" id="two_table" src='/assetsTable2.png' width='20px' height='20px'></p>
 </div>
 
 </div>
