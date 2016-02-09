@@ -146,7 +146,7 @@
         $(document).ready(function () {
             $("#<%= @x_grid_ref%><%= @y_grid_ref%>").addClass("td_cl_md");
             $("#<%= @x_grid_ref%><%= @y_grid_ref%>").removeClass("td_cl_lg");
-            $("#<%= 'x'+@x_grid_ref.to_s%><%= 'y'+@y_grid_ref.to_s%>").html("<div style='height:100%; color:white; background-color:<%= @selected_block_color%>' ><span style='font-size:11px; font-weight:bold; position:relative; float:left;'><%= @block_name%></span><p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><span onclick='table_show(<%= @seat_number %>, <%= @seat_layout_id%>, \"<%= @uuid_number%>\");'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='15px' height='15px' style='margin-top: -7px;'  class='del_img' ></span><span class='seat_number' style= 'position: absolute; margin-top: 14px; font-size: 11px; margin-left:1px; color:white;'><%= @seat_number%></span><span><%- if @uuid_number.present?%><img src='/assetsbeacon.png' width='20px' height='20px' style='float:left; position:absolute; margin-top:15px; margin-left:-30px;'/></span><% end%></div>");
+            $("#<%= 'x'+@x_grid_ref.to_s%><%= 'y'+@y_grid_ref.to_s%>").html("<div style='height:100%; color:white; background-color:<%= @selected_block_color%>' ><span style='font-size:11px; font-weight:bold; position:relative; float:left;'><%= @block_name%></span><p style='margin-top: -2%; color:black; font-weight:500; font-size: 12px;'><span onclick='table_show(<%= @seat_number %>, <%= @seat_layout_id%>, \"<%= @uuid_number%>\");'><img src='/assetsTable2.png' id='img_<%= @x_grid_ref %><%= @y_grid_ref %>' width='15px' height='15px' style='margin-top: -7px;'  class='del_img' ></span><span class='seat_number' style= 'position: absolute; margin-top: 14px; font-size: 11px; margin-left:1px; color:white;'><%= @seat_number%></span><span><%- if @uuid_number.present?%><img src='/assetsibeacon2.png' width='20px' height='20px' style='float:left; position:absolute; margin-top:15px; margin-left:-30px;'/></span><% end%></div>");
             $("#<%= @x_grid_ref%><%= @y_grid_ref%>").css('background-color', '#C3C3C3');
 
         });
@@ -395,6 +395,17 @@
         $("#already_value").val('');
     }
 </script>
+<script>
+    function check_data(){
+        var user_id = JSON.parse(localStorage.getItem('user_id'));
+        if (user_id){
+            alert('You have unsave data please save before leaving the page.');
+
+        }else{
+            javascript:history.back();
+        }
+    }
+</script>
 
 <div id="box">
   <div id="auto_fill" style="width: 18%; height: 145px; z-index: 9999; background-color: grey; display: none; position:absolute; margin-top: 10%; margin-left: 10%; border-radius:5px;">
@@ -415,8 +426,8 @@
       <input type="button" value="Submit" style="margin-left: 33%; margin-top: 8%; background-color: #337ab7; color: white; border: 1px solid black; border-radius: 5px;" onclick="update_box();">
     </form>
   </div>
-  <div style="float:right; margin-top:-9%;">
-    <%= link_to "Go Back", 'javascript:history.back()',class: "btn btn-primary" %>
+  <div style="float:right; margin-top:-21%;">
+    <%= link_to "Go Back", 'javascript:history.back()', :onclick=> 'check_data(); return false;',class: "btn btn-primary" %>
   </div>
 </div>
 <style>
